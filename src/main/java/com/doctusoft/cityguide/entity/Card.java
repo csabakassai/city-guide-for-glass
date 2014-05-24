@@ -24,5 +24,4 @@ public class Card {
 	@Load
 	private String cardTypeId;
 	private Map<String, String> properties = Maps.newHashMap();
-	
 }

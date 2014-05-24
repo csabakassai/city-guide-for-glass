@@ -114,10 +114,12 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		
 		String userId = AuthUtil.getUserId(req);
+		System.out.println(userId);
 		Credential credential = AuthUtil.newAuthorizationCodeFlow().loadCredential(userId);
 		String message = "";
 		
 		if (req.getParameter("operation").equals("initData")) {
+<<<<<<< HEAD
 			
 			tourService.deleteAll();
 			cardService.deleteAll();
@@ -202,6 +204,16 @@ public class MainServlet extends HttpServlet {
 			
 			user.getTourIds().add(tour.getId());
 			
+=======
+			PlaceService.getIndex().delete("5b3ef6a5-e9fc-4057-9593-925c0d8c258e");
+			
+			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
+			Card card = cardService.save(Card.builder().cardTypeId(type.getId()).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
+			message = timelineService.sendTimeLineItem(userId, card);
+			
+			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(card.getId())).location(new GeoPt(47.495598f, 19.0352177f)).build();
+			placeService.save(place);
+>>>>>>> 879e55a4d191e1f6142c14eab0a543584c92c0e0
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			

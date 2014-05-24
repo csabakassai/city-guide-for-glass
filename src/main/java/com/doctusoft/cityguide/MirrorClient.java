@@ -30,14 +30,10 @@ import com.google.api.services.mirror.Mirror;
 import com.google.api.services.mirror.model.Attachment;
 import com.google.api.services.mirror.model.Contact;
 import com.google.api.services.mirror.model.ContactsListResponse;
-import com.google.api.services.mirror.model.Location;
-import com.google.api.services.mirror.model.MenuItem;
-import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.Subscription;
 import com.google.api.services.mirror.model.SubscriptionsListResponse;
 import com.google.api.services.mirror.model.TimelineItem;
 import com.google.api.services.mirror.model.TimelineListResponse;
-import com.google.appengine.repackaged.com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 
 /**
@@ -132,21 +128,7 @@ public class MirrorClient {
 	 */
 	public static TimelineItem insertTimelineItem(Credential credential, TimelineItem item)
 			throws IOException {
-		
-		MenuItem menuItem = new MenuItem();
-		menuItem.setAction("NAVIGATE");
-		
-		Location location = new Location();
-		location.setLatitude(new Double(47.5096592));
-		location.setLongitude(new Double(19.0965185));
-		
-		item.setLocation(location);
-		
-		item.setMenuItems(Lists.newArrayList(menuItem));
-		
-		item.setNotification(new NotificationConfig().setLevel("DEFAULT"));
-		item.setSpeakableText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-		
+		LOG.info("insert card: " + item.getHtml());
 		return getMirror(credential).timeline().insert(item).execute();
 	}
 	

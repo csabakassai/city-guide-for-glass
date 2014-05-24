@@ -22,14 +22,12 @@ public class PlaceService extends EntityDao<Place> {
 	
 	private static final String INDEX_NAME = "places";
 	
-	private Double threshold = new Double(1);
-	
 	@Override
 	Class<Place> getEntityClass() {
 		return Place.class;
 	}
 	
-	static Index getIndex() {
+	public static Index getIndex() {
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName(INDEX_NAME).build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
@@ -54,7 +52,7 @@ public class PlaceService extends EntityDao<Place> {
 		Place place = null;
 		if (results.iterator().hasNext()) {
 			ScoredDocument document = results.iterator().next();
-			String id = document.getOnlyField("id").getText();
+			String id = document.getId();
 			
 			place = load(id);
 			Preconditions.checkNotNull(place);

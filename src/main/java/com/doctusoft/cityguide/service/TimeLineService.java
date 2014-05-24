@@ -2,6 +2,7 @@ package com.doctusoft.cityguide.service;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -58,7 +59,6 @@ public class TimeLineService {
 		
 		// Triggers an audible tone when the timeline item is received
 		timelineItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));
-		timelineItem.setSpeakableText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
 		try {
 			MirrorClient.insertTimelineItem(AuthUtil.getCredential(user), timelineItem);
 			return timelineItem.getHtml();

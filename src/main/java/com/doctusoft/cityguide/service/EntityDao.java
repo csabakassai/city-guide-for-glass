@@ -23,6 +23,10 @@ public abstract class EntityDao<T> {
 		return ofy().load().type(getEntityClass()).id(id).now();
 	}
 	
+	public Iterable<T> load(Iterable<String> ids) {
+		return ofy().load().type(getEntityClass()).ids(ids).values();
+	}
+	
 	public List<T> loadAll() {
 		return ofy().load().type(getEntityClass()).list();
 	}

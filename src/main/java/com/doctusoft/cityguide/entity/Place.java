@@ -27,6 +27,7 @@ public class Place {
 	private String id;
 	private String name;
 	private List<String> pictureUrls = Lists.newArrayList();
+	
 	@Load
 	private List<String> cardIds = Lists.newArrayList();
 	private GeoPt location;
