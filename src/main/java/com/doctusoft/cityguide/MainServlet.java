@@ -120,7 +120,7 @@ public class MainServlet extends HttpServlet {
 		String message = "";
 		
 		if (req.getParameter("operation").equals("initData")) {
-			PlaceService.getIndex().delete("1dd829cc-bd76-469e-a113-a4957b79aea1", "55685972-7454-4beb-9077-d14314e3ce73");
+			PlaceService.getIndex().delete("5b3ef6a5-e9fc-4057-9593-925c0d8c258e");
 			
 			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
 			Card card = cardService.save(Card.builder().cardTypeId(type.getId()).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());

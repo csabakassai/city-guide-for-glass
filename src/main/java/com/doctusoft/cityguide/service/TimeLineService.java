@@ -1,6 +1,7 @@
 package com.doctusoft.cityguide.service;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -38,8 +39,7 @@ public class TimeLineService {
 		
 		timelineItem.setLocation(location);
 		
-		
-		timelineItem.getMenuItems().add(menuItem);
+		timelineItem.setMenuItems(Collections.singletonList(menuItem));
 		
 		// Triggers an audible tone when the timeline item is received
 		timelineItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));
