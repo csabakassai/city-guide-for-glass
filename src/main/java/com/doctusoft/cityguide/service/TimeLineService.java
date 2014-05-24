@@ -19,7 +19,7 @@ import com.google.api.services.mirror.model.TimelineItem;
 public class TimeLineService {
 	
 	public String sendTimeLineItem(String user, Card card) {
-		CardType cardType = card.getCardType().get();
+		CardType cardType = new CardTypeDao().load(card.getCardTypeId());
 		String html = cardType.getText();
 		
 		for (Entry<String, String> entry : card.getProperties().entrySet()) {

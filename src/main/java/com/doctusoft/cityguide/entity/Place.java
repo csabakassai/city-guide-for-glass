@@ -9,11 +9,9 @@ import lombok.experimental.Builder;
 
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Unindex;
 
 @AllArgsConstructor
@@ -28,8 +26,7 @@ public class Place {
 	private String id;
 	private String name;
 	private List<String> pictureUrls = Lists.newArrayList();
-	@Load
-	private List<Ref<Card>> cards = Lists.newArrayList();
+	private List<String> cards = Lists.newArrayList();
 	private GeoPt location;
 	
 }

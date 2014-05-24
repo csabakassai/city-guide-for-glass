@@ -17,20 +17,17 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortOptions;
 import com.google.common.base.Preconditions;
-import com.googlecode.objectify.Ref;
 
 public class PlaceService extends EntityDao<Place> {
 	
 	private static final String INDEX_NAME = "places";
-	
-	private Double threshold = new Double(1);
 	
 	@Override
 	Class<Place> getEntityClass() {
 		return Place.class;
 	}
 	
-	static Index getIndex() {
+	public static Index getIndex() {
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName(INDEX_NAME).build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
@@ -55,7 +52,7 @@ public class PlaceService extends EntityDao<Place> {
 		Place place = null;
 		if (results.iterator().hasNext()) {
 			ScoredDocument document = results.iterator().next();
-			String id = document.getOnlyField("id").getText();
+			String id = document.getId();
 			
 			place = load(id);
 			Preconditions.checkNotNull(place);
@@ -70,8 +67,9 @@ public class PlaceService extends EntityDao<Place> {
 		Builder builder = Document.newBuilder().setId(place.getId())
 				.addField(Field.newBuilder().setName("location").setGeoPoint(new GeoPoint(place.getLocation().getLatitude(), place.getLocation().getLongitude())).build())
 				.addField(Field.newBuilder().setName("name").setText(place.getName()).build());
-		for (Ref<Card> card : place.getCards()) {
-			for (String description : card.get().getProperties().values()) {
+		Iterable<Card> cards = new CardService().load(place.getCards());
+		for (Card card : cards) {
+			for (String description : card.getProperties().values()) {
 				if (description != null) {
 					builder.addField(Field.newBuilder().setName("description").setText(description).build());
 				}

@@ -51,7 +51,6 @@ import com.google.api.services.mirror.model.TimelineItem;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Ref;
 
 /**
  * Handles POST requests from index.jsp
@@ -116,16 +115,18 @@ public class MainServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		
 		String userId = AuthUtil.getUserId(req);
+		System.out.println(userId);
 		Credential credential = AuthUtil.newAuthorizationCodeFlow().loadCredential(userId);
 		String message = "";
 		
 		if (req.getParameter("operation").equals("initData")) {
+			PlaceService.getIndex().delete("1dd829cc-bd76-469e-a113-a4957b79aea1", "55685972-7454-4beb-9077-d14314e3ce73");
+			
 			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
-			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
+			Card card = cardService.save(Card.builder().cardTypeId(type.getId()).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
 			message = timelineService.sendTimeLineItem(userId, card);
 			
-			Ref<Card> ref = Ref.create(card);
-			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(ref)).location(new GeoPt(10, 10)).build();
+			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(card.getId())).location(new GeoPt(47.495598f, 19.0352177f)).build();
 			placeService.save(place);
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
