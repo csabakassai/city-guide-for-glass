@@ -187,8 +187,8 @@ limitations under the License.
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertItem">
         <input type="hidden" name="message" value="AudiGuide">
-        <input type="hidden" name="audioUrl" value="<%= appBaseUrl + "/static/audioBlackBerry.mp4" %>">
-        <input type="hidden" name="contentType" value="video/mp4">
+        <input type="text" name="audioUrl">
+        <input type="text" name="contentType">
 
         <button class="btn btn-block" type="submit">Insert audio
         </button>
