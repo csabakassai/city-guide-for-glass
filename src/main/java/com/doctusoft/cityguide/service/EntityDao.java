@@ -2,6 +2,8 @@ package com.doctusoft.cityguide.service;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.util.List;
+
 import com.googlecode.objectify.ObjectifyService;
 
 public abstract class EntityDao<T> {
@@ -19,5 +21,9 @@ public abstract class EntityDao<T> {
 	
 	public T load(String id) {
 		return ofy().load().type(getEntityClass()).id(id).now();
+	}
+	
+	public List<T> loadAll() {
+		return ofy().load().type(getEntityClass()).list();
 	}
 }
