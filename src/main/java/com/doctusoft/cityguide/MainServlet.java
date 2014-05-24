@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.CardType;
+import com.doctusoft.cityguide.entity.Place;
 import com.doctusoft.cityguide.service.CardService;
 import com.doctusoft.cityguide.service.CardTypeDao;
 import com.doctusoft.cityguide.service.PlaceService;
@@ -119,6 +121,10 @@ public class MainServlet extends HttpServlet {
 			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
 			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
 			message = timelineService.sendTimeLineItem(userId, card);
+			
+			Ref<Card> ref = Ref.create(card);
+			
+			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
 			// subscribe (only works deployed to production)

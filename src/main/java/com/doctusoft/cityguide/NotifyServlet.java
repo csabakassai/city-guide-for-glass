@@ -15,6 +15,10 @@
  */
 package com.doctusoft.cityguide;
 
+import com.doctusoft.cityguide.entity.Card;
+import com.doctusoft.cityguide.entity.Place;
+import com.doctusoft.cityguide.service.PlaceService;
+import com.doctusoft.cityguide.service.TimeLineService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -25,7 +29,9 @@ import com.google.api.services.mirror.model.Notification;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
 import com.google.api.services.mirror.model.UserAction;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.googlecode.objectify.Ref;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +39,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.logging.Logger;
+import java.util.Iterator;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -103,7 +110,18 @@ public class NotifyServlet extends HttpServlet {
       // item id is usually 'latest'
       Location location = glass.locations().get(notification.getItemId()).execute();
 
+      PlaceService placeService = new PlaceService();
+      Place place = placeService.isPlaceNearBy(location);
+      if(place != null) {
+    	  TimeLineService timeLineService = new TimeLineService(); 
+    	  Iterator<Ref<Card>> iterator = place.getCards().iterator();
+		Preconditions.checkArgument(iterator.hasNext());
+    	  timeLineService.sendTimeLineItem(userId, iterator.next().get());
+      }
+      
       LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
+      
+      
       MirrorClient.insertTimelineItem(
           credential,
           new TimelineItem()
