@@ -298,6 +298,9 @@ limitations under the License.
       <% } %>
       
    <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+      <textarea class="span4" name="template">
+					template
+					</textarea><br/>
         <input type="hidden" name="operation" value="initData">
           <button class="btn btn-block btn-success" type="submit">
           init data

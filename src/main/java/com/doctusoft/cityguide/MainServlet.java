@@ -55,7 +55,6 @@ import com.googlecode.objectify.Ref;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class MainServlet extends HttpServlet {
-
 	
 	private CardService cardService = new CardService();
 	private CardTypeDao cardTypeService = new CardTypeDao();
@@ -100,10 +99,10 @@ public class MainServlet extends HttpServlet {
 					+ "this process to maximize your enjoyment of your cat.</p><br/><p>"
 					+ "For more cat maintenance tips, tap to view the website!</p>"
 					+ "</article>";
-	private static final String TEMPLATE_HTML =
-			"<article class='auto-paginate'>"
-					+ "<h2 class='blue text-large'>${title}</h2>"
-					+ "<p>${content}</p>"
+	public static final String TEMPLATE_HTML =
+			"<article class='auto-paginate black'>"
+					+ "<h2 class='white text-large'>${title}</h2>"
+					+ "<p style='color=black background-color=white'>${content}</p>"
 					+ "</article>";
 	
 	/**
@@ -117,8 +116,8 @@ public class MainServlet extends HttpServlet {
 		String message = "";
 		
 		if (req.getParameter("operation").equals("initData")) {
-			CardType type = cardTypeService.save(CardType.builder().text(TEMPLATE_HTML).build());
-			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "foobar")).build());
+			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
+			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
 			timelineService.sendTimeLineItem(userId, card.getId());
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
@@ -156,13 +155,13 @@ public class MainServlet extends HttpServlet {
 				URL url = new URL(req.getParameter("imageUrl"));
 				String contentType = req.getParameter("contentType");
 				MirrorClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
-			
+				
 			} else if (req.getParameter("audioUrl") != null) {
-	          // Attach an audio, if we have one
-	          URL url = new URL(req.getParameter("audioUrl"));
-	          String contentType = req.getParameter("contentType");
-	          MirrorClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
-	      }
+				// Attach an audio, if we have one
+				URL url = new URL(req.getParameter("audioUrl"));
+				String contentType = req.getParameter("contentType");
+				MirrorClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
+			}
 			else {
 				MirrorClient.insertTimelineItem(credential, timelineItem);
 			}
