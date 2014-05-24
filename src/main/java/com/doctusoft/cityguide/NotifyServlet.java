@@ -32,6 +32,7 @@ import com.doctusoft.cityguide.entity.Place;
 import com.doctusoft.cityguide.entity.Tour;
 import com.doctusoft.cityguide.entity.User;
 import com.doctusoft.cityguide.service.CardService;
+import com.doctusoft.cityguide.service.MapsService;
 import com.doctusoft.cityguide.service.PlaceService;
 import com.doctusoft.cityguide.service.TimeLineService;
 import com.doctusoft.cityguide.service.TourService;
@@ -118,33 +119,29 @@ public class NotifyServlet extends HttpServlet {
 		      Preconditions.checkNotNull(actualUser);
 		      String actualTourId = actualUser.getActualTourId();
 		      if(actualTourId != null) {
-		      TourService tourService = new TourService();
-		      
-		      Tour actualTour = tourService.load(actualTourId);
-		      
-		      Mirror glass = MirrorClient.getMirror(credential);
-		      // item id is usually 'latest'
-		      Location location = glass.locations().get(notification.getItemId()).execute();
-		
-		      
-		      
-		      PlaceService placeService = new PlaceService();
-		      Place place = placeService.isPlaceNearBy(location);
-		      if(place != null) {
-		    	  Place nextPlace = null;
-		    	  CardService cardService = new CardService();
-		    	  actualTour.setActualPlaceId(place.getId());
-		    	  TimeLineService timeLineService = new TimeLineService(); 
-		    	  for(String cardId: place.getCardIds()) {
-		    		  Card card = cardService.load(cardId);
-		    		  Preconditions.checkNotNull(card);
-		    		  timeLineService.sendInfoCardItem(userId, card, nextPlace);
-		    	  }
-		      } else {
-				LOG.info("place is null");
-			}
+			      TourService tourService = new TourService();
+			      
+			      Tour actualTour = tourService.load(actualTourId);
+			      
+			      
+			      PlaceService placeService = new PlaceService();
+			      Place place = placeService.isPlaceNearBy(location);
+			      if(place != null) {
+			    	  Place nextPlace = null;
+			    	  CardService cardService = new CardService();
+			    	  actualTour.setActualPlaceId(place.getId());
+			    	  TimeLineService timeLineService = new TimeLineService(); 
+			    	  for(String cardId: place.getCardIds()) {
+			    		  Card card = cardService.load(cardId);
+			    		  Preconditions.checkNotNull(card);
+			    		  timeLineService.sendInfoCardItem(userId, card, nextPlace);
+			    	  }
+			      } else {
+					LOG.info("place is null");
+			      }
 			
 			LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
+		      }
 			
 			// This is a location notification. Ping the device with a timeline item
 			// telling them where they are.
