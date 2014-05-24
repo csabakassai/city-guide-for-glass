@@ -18,6 +18,7 @@ limitations under the License.
 <%@ page import="com.doctusoft.cityguide.MirrorClient" %>
 <%@ page import="com.doctusoft.cityguide.WebUtil" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.google.api.services.mirror.model.TimelineItem" %>
 <%@ page import="com.google.api.services.mirror.model.Subscription" %>
 <%@ page import="com.google.api.services.mirror.model.Attachment" %>
@@ -35,7 +36,7 @@ limitations under the License.
 
   Contact contact = MirrorClient.getContact(credential, MainServlet.CONTACT_ID);
 
-  List<TimelineItem> timelineItems = MirrorClient.listItems(credential, 3L).getItems();
+  List<TimelineItem> timelineItems = new ArrayList<TimelineItem>();// MirrorClient.listItems(credential, 3L).getItems();
 
 
   List<Subscription> subscriptions = MirrorClient.listSubscriptions(credential).getItems();

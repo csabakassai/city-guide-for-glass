@@ -28,6 +28,7 @@ public class Place {
 	private List<String> pictureUrls = Lists.newArrayList();
 	@Load
 	private List<Ref<Card>> cards = Lists.newArrayList();
+	private GeoPt location;
 	
 	private GeoPt geoPt;
 	
