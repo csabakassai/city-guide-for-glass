@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.doctusoft.cityguide.entity.Place;
 import com.doctusoft.cityguide.service.CardService;
+import com.doctusoft.cityguide.service.MapsService;
 import com.doctusoft.cityguide.service.PlaceService;
 import com.doctusoft.cityguide.service.TimeLineService;
 import com.google.api.client.auth.oauth2.Credential;
@@ -106,6 +107,8 @@ public class NotifyServlet extends HttpServlet {
 			Mirror glass = MirrorClient.getMirror(credential);
 			// item id is usually 'latest'
 			Location location = glass.locations().get(notification.getItemId()).execute();
+			
+			new MapsService().search(location, "restaurant");
 			
 			PlaceService placeService = new PlaceService();
 			Place place = placeService.isPlaceNearBy(location);
