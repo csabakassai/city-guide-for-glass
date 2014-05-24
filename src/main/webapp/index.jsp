@@ -185,6 +185,15 @@ limitations under the License.
         </button>
       </form>
       <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+        <input type="hidden" name="operation" value="insertItem">
+        <input type="hidden" name="message" value="AudiGuide">
+        <input type="hidden" name="audioUrl" value="<%= appBaseUrl + "/static/audioBlackBerry.mp4" %>">
+        <input type="hidden" name="contentType" value="video/mp4">
+
+        <button class="btn btn-block" type="submit">Insert audio
+        </button>
+      </form>
+      <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
         <input type="hidden" name="operation" value="insertPaginatedItem">
         <button class="btn btn-block" type="submit">
           Insert a card with long paginated HTML</button>

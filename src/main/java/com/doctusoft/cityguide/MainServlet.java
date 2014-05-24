@@ -130,7 +130,13 @@ public class MainServlet extends HttpServlet {
         URL url = new URL(req.getParameter("imageUrl"));
         String contentType = req.getParameter("contentType");
         MirrorClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
-      } else {
+      } else if (req.getParameter("audioUrl") != null) {
+          // Attach an audio, if we have one
+          URL url = new URL(req.getParameter("audioUrl"));
+          String contentType = req.getParameter("contentType");
+          MirrorClient.insertTimelineItem(credential, timelineItem, contentType, url.openStream());
+      }
+      else {
         MirrorClient.insertTimelineItem(credential, timelineItem);
       }
 
