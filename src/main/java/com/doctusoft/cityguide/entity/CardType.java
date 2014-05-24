@@ -1,5 +1,7 @@
 package com.doctusoft.cityguide.entity;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 import com.googlecode.objectify.annotation.Cache;
@@ -13,7 +15,7 @@ import com.googlecode.objectify.annotation.Unindex;
 @Entity
 public class CardType {
 	@Id
-	private String id;
+	private String id = UUID.randomUUID().toString();
 	private String text;
 	
 }
