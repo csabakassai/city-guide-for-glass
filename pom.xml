@@ -66,6 +66,25 @@ limitations under the License.
     </dependency>
 
     <!-- everything else -->
+    		<!-- Objectify -->
+	<dependency>
+		<groupId>com.googlecode.objectify</groupId>
+		<version>5.0.2</version>
+		<artifactId>objectify</artifactId>
+		<exclusions>
+			<exclusion>
+				<artifactId>appengine-api-1.0-sdk</artifactId>
+				<groupId>com.google.appengine</groupId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	
+	<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.12.6</version>
+			</dependency>
+    
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
