@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Builder;
 
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.base.Objects;
@@ -18,6 +19,7 @@ import com.googlecode.objectify.annotation.Unindex;
 
 @NoArgsConstructor
 @Data
+@Builder
 @Unindex
 @Cache
 @Entity
@@ -30,14 +32,13 @@ public class Place {
 	private List<Ref<Card>> cards = Lists.newArrayList();
 	private GeoPt location;
 	
-	private GeoPt geoPt;
-	
-	public Place(String id, String name, List<String> pictureUrls, List<Ref<Card>> cards) {
+	public Place(String id, String name, List<String> pictureUrls, List<Ref<Card>> cards, GeoPt location ) {
 		super();
 		this.id = Objects.firstNonNull(id, UUID.randomUUID().toString());
 		this.name = name;
 		this.pictureUrls = pictureUrls;
 		this.cards = cards;
+		this.location = location;
 	}
 
 	public List<Ref<Card>> getCards() {

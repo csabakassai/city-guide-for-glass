@@ -10,6 +10,8 @@ import com.doctusoft.cityguide.AuthUtil;
 import com.doctusoft.cityguide.MirrorClient;
 import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.CardType;
+import com.google.api.services.mirror.model.Location;
+import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
 
@@ -28,6 +30,18 @@ public class TimeLineService {
 		
 		TimelineItem timelineItem = new TimelineItem();
 		timelineItem.setHtml(html);
+		
+		MenuItem menuItem = new MenuItem();
+		menuItem.setAction("NAVIGATE");
+		
+		Location location = new Location();
+		location.setLatitude(new Double(100));
+		location.setLongitude(new Double(100));
+		
+		timelineItem.setLocation(location);
+		
+		
+		timelineItem.getMenuItems().add(menuItem);
 		
 		// Triggers an audible tone when the timeline item is received
 		timelineItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));

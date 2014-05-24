@@ -47,6 +47,8 @@ import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.MenuValue;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
+import com.google.appengine.api.datastore.GeoPt;
+import com.google.appengine.api.search.GeoPoint;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Ref;
@@ -123,6 +125,11 @@ public class MainServlet extends HttpServlet {
 			message = timelineService.sendTimeLineItem(userId, card);
 			
 			Ref<Card> ref = Ref.create(card);
+			
+			Place place = Place.builder().name("Hősök tere").cards(Lists.newArrayList(ref)).location(new GeoPt(10, 10)).build();
+			placeService.save(place);
+			
+			
 			
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
