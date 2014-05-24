@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Builder;
 
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.base.Objects;
@@ -16,6 +17,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Unindex;
 
+@Builder
 @NoArgsConstructor
 @Data
 @Unindex
@@ -39,15 +41,13 @@ public class Place {
 		this.pictureUrls = pictureUrls;
 		this.cards = cards;
 	}
-
+	
 	public List<Ref<Card>> getCards() {
 		return cards;
 	}
-
+	
 	public void setCards(List<Ref<Card>> cards) {
 		this.cards = cards;
 	}
-	
-	
 	
 }
