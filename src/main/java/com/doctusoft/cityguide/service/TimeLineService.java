@@ -18,8 +18,7 @@ public class TimeLineService {
 	
 	private CardService cardService = new CardService();
 	
-	public void sendTimeLineItem(String user, String cardId) {
-		Card card = cardService.load(cardId);
+	public String sendTimeLineItem(String user, Card card) {
 		CardType cardType = card.getCardType().get();
 		String html = cardType.getText();
 		
@@ -35,8 +34,11 @@ public class TimeLineService {
 		
 		try {
 			MirrorClient.insertTimelineItem(AuthUtil.getCredential(user), timelineItem);
+			return timelineItem.getHtml();
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "ops", e);
+			return e.getMessage();
 		}
+		
 	}
 }

@@ -118,7 +118,7 @@ public class MainServlet extends HttpServlet {
 		if (req.getParameter("operation").equals("initData")) {
 			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
 			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
-			timelineService.sendTimeLineItem(userId, card.getId());
+			message = timelineService.sendTimeLineItem(userId, card);
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
 			// subscribe (only works deployed to production)

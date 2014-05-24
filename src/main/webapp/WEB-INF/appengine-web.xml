@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-  <application>doctusoft-city-guide</application>
+  <application>doctusoft-city-guide2</application>
   <version>cskassai</version>
   <sessions-enabled>true</sessions-enabled>
   <threadsafe>true</threadsafe>
