@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -124,7 +125,7 @@ public class MainServlet extends HttpServlet {
 			message = timelineService.sendTimeLineItem(userId, card);
 			
 			Ref<Card> ref = Ref.create(card);
-			Place place = Place.builder().name("Hősök tere").cards(Collections.singletonList(ref)).location(new GeoPt(10, 10)).build();
+			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(ref)).location(new GeoPt(10, 10)).build();
 			placeService.save(place);
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
