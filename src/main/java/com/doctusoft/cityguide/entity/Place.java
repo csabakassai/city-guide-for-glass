@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Ref;
@@ -27,6 +28,7 @@ public class Place {
 	private List<String> pictureUrls = Lists.newArrayList();
 	@Load
 	private List<Ref<Card>> cards = Lists.newArrayList();
+	private GeoPt location;
 	
 	public Place(String id, String name, List<String> pictureUrls, List<Ref<Card>> cards) {
 		super();
