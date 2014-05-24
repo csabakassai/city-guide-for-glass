@@ -1,6 +1,7 @@
 package com.doctusoft.cityguide.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,7 @@ import com.googlecode.objectify.annotation.Unindex;
 @Entity
 public class Place {
 	@Id
-	private String id;
+	private String id = UUID.randomUUID().toString();
 	private String name;
 	private List<String> pictureUrls = Lists.newArrayList();
 	
