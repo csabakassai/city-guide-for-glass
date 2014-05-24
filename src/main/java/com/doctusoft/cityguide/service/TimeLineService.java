@@ -16,8 +16,6 @@ import com.google.api.services.mirror.model.TimelineItem;
 @Log
 public class TimeLineService {
 	
-	private CardService cardService = new CardService();
-	
 	public String sendTimeLineItem(String user, Card card) {
 		CardType cardType = card.getCardType().get();
 		String html = cardType.getText();
