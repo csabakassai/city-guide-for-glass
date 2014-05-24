@@ -12,11 +12,12 @@ public abstract class EntityDao<T> {
 	
 	abstract Class<T> getEntityClass();
 	
-	public void save(T card) {
+	public T save(T card) {
 		ofy().save().entity(card);
+		return card;
 	}
 	
-	public T loadTour(String id) {
+	public T load(String id) {
 		return ofy().load().type(getEntityClass()).id(id).now();
 	}
 }

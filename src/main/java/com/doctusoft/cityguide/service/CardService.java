@@ -8,4 +8,5 @@ public class CardService extends EntityDao<Card> {
 	Class<Card> getEntityClass() {
 		return Card.class;
 	}
+	
 }
