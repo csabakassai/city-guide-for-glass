@@ -125,10 +125,9 @@ public class MainServlet extends HttpServlet {
 			placeService.deleteAll();
 			
 			List<Place> places = Lists.newArrayList();
-			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
+			CardType type = cardTypeService.save(CardType.builder().text(TEMPLATE_HTML).build());
 			
 			Place hosok = new Place();
-			placeService.save(hosok);
 			places.add(hosok);
 			
 			Card hosok1 = new Card();
@@ -148,10 +147,10 @@ public class MainServlet extends HttpServlet {
 			hosok3.getProperties().put("title", "Hősök 3");
 			cardService.save(hosok3);
 			hosok.getCardIds().add(hosok3.getId());
+			placeService.save(hosok);
 			
 			
 			Place bazilika = new Place();
-			placeService.save(bazilika);
 			places.add(bazilika);
 			
 			
@@ -173,8 +172,9 @@ public class MainServlet extends HttpServlet {
 			cardService.save(bazilika3);
 			bazilika.getCardIds().add(bazilika3.getId());
 			
+			placeService.save(bazilika);
+			
 			Place parl = new Place();
-			placeService.save(parl);
 			places.add(parl);
 			
 			Card parl1 = new Card();
@@ -192,6 +192,7 @@ public class MainServlet extends HttpServlet {
 			parl3.getProperties().put("title", "Hősök 3");
 			cardService.save(parl3);
 
+			placeService.save(parl);
 			
 			
 			
