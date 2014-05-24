@@ -18,8 +18,6 @@ import com.google.api.services.mirror.model.TimelineItem;
 @Log
 public class TimeLineService {
 	
-	private CardService cardService = new CardService();
-	
 	public String sendTimeLineItem(String user, Card card) {
 		CardType cardType = card.getCardType().get();
 		String html = cardType.getText();
@@ -35,8 +33,8 @@ public class TimeLineService {
 		menuItem.setAction("NAVIGATE");
 		
 		Location location = new Location();
-		location.setLatitude(new Double(100));
-		location.setLongitude(new Double(100));
+		location.setLatitude(new Double(47.5096592));
+		location.setLongitude(new Double(19.0965185));
 		
 		timelineItem.setLocation(location);
 		

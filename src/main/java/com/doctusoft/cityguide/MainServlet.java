@@ -18,6 +18,7 @@ package com.doctusoft.cityguide;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -48,7 +49,6 @@ import com.google.api.services.mirror.model.MenuValue;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
 import com.google.appengine.api.datastore.GeoPt;
-import com.google.appengine.api.search.GeoPoint;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Ref;
@@ -125,12 +125,8 @@ public class MainServlet extends HttpServlet {
 			message = timelineService.sendTimeLineItem(userId, card);
 			
 			Ref<Card> ref = Ref.create(card);
-			
-			Place place = Place.builder().name("Hősök tere").cards(Lists.newArrayList(ref)).location(new GeoPt(10, 10)).build();
+			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(ref)).location(new GeoPt(10, 10)).build();
 			placeService.save(place);
-			
-			
-			
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
