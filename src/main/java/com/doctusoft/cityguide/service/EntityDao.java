@@ -15,6 +15,7 @@ public abstract class EntityDao<T> {
 	abstract Class<T> getEntityClass();
 	
 	public T save(T card) {
+		System.out.println("save: " + card);
 		ofy().save().entity(card);
 		return card;
 	}

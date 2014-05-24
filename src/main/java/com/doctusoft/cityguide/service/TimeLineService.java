@@ -1,7 +1,7 @@
 package com.doctusoft.cityguide.service;
 
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -25,7 +25,7 @@ public class TimeLineService {
 	
 	public String sendInfoCardItem(String user, Card card, Place nextPlace) {
 		
-//		CardType cardType = card.getCardTypeId().get();
+		// CardType cardType = card.getCardTypeId().get();
 		CardTypeDao cardTypeDao = new CardTypeDao();
 		CardType cardType = cardTypeDao.load(card.getCardTypeId());
 		String html = cardType.getText();
@@ -36,23 +36,27 @@ public class TimeLineService {
 		
 		TimelineItem timelineItem = new TimelineItem();
 		timelineItem.setHtml(html);
+		timelineItem.setSpeakableText(card.getAudio());
 		
+		MenuValue read = new MenuValue();
+		read.setDisplayName("read");
 		MenuItem readOutLoudMenuItem = new MenuItem();
 		readOutLoudMenuItem.setAction("READ_ALOUD");
+		readOutLoudMenuItem.setValues(Arrays.asList(read));
+		
+		MenuValue menuValue = new MenuValue();
+		menuValue.setDisplayName("Next");
 		
 		MenuItem nextMenuItem = new MenuItem();
-		nextMenuItem.setAction("NAVIGATE");
-		timelineItem.setMenuItems(Lists.newArrayList(nextMenuItem));
+		nextMenuItem.setAction("DELETE");
+		nextMenuItem.setValues(Arrays.asList(menuValue));
 		
-		Iterator<MenuValue> iterator = nextMenuItem.getValues().iterator();
-		iterator.next().setDisplayName("Next place");
 		Location location = new Location();
 		GeoPt persistentLcation = nextPlace.getLocation();
 		location.setLatitude(new Double(persistentLcation.getLatitude()));
 		location.setLongitude(new Double(persistentLcation.getLongitude()));
 		
 		timelineItem.setLocation(location);
-		
 		
 		timelineItem.setMenuItems(Lists.newArrayList(readOutLoudMenuItem, nextMenuItem));
 		

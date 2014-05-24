@@ -69,12 +69,14 @@ public class PlaceService extends EntityDao<Place> {
 				.addField(Field.newBuilder().setName("name").setText(place.getName()).build());
 		CardService cardService = new CardService();
 		for (String cardId : place.getCardIds()) {
+			System.out.println("cardId: " + cardId);
 			Card card = cardService.load(cardId);
-			for (String description : card.getProperties().values()) {
-				if (description != null) {
-					builder.addField(Field.newBuilder().setName("description").setText(description).build());
-				}
-			}
+			System.out.println("card: " + card);
+			// for (String description : card.getProperties().values()) {
+			// if (description != null) {
+			// builder.addField(Field.newBuilder().setName("description").setText(description).build());
+			// }
+			// }
 		}
 		Document indexEntry = builder.build();
 		Index index = getIndex();

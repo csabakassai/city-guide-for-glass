@@ -48,7 +48,7 @@ import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.MenuValue;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
-import com.google.common.base.Preconditions;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.common.collect.Lists;
 
 /**
@@ -101,8 +101,12 @@ public class MainServlet extends HttpServlet {
 					+ "this process to maximize your enjoyment of your cat.</p><br/><p>"
 					+ "For more cat maintenance tips, tap to view the website!</p>"
 					+ "</article>";
+	
+	public static final String TEMPLATE = "<article class=\"photo\">"
+			+ "<img src=\"${picture}\" width=\"100%\" height=\"100%\">"
+			+ "</article>";
 	public static final String TEMPLATE_HTML =
-			"<article class='auto-paginate black'>"
+			"<article>"
 					+ "<h2 class='white text-large'>${title}</h2>"
 					+ "<p style='color=black background-color=white'>${content}</p>"
 					+ "</article>";
@@ -125,72 +129,11 @@ public class MainServlet extends HttpServlet {
 			placeService.deleteAll();
 			
 			List<Place> places = Lists.newArrayList();
-			CardType type = cardTypeService.save(CardType.builder().text(TEMPLATE_HTML).build());
+			CardType type = cardTypeService.save(CardType.builder().text(TEMPLATE).build());
 			
-			Place hosok = new Place();
-			places.add(hosok);
-			
-			Card hosok1 = new Card();
-			hosok1.setCardTypeId(type.getId());
-			hosok1.getProperties().put("title", "Hősök 1");
-			cardService.save(hosok1);
-			hosok.getCardIds().add(hosok1.getId());
-			
-			Card hosok2 = new Card();
-			hosok2.setCardTypeId(type.getId());
-			hosok2.getProperties().put("title", "Hősök 2");
-			cardService.save(hosok2);
-			hosok.getCardIds().add(hosok2.getId());
-			
-			Card hosok3 = new Card();
-			hosok3.setCardTypeId(type.getId());
-			hosok3.getProperties().put("title", "Hősök 3");
-			cardService.save(hosok3);
-			hosok.getCardIds().add(hosok3.getId());
-			placeService.save(hosok);
-			
-			Place bazilika = new Place();
-			places.add(bazilika);
-			
-			Card bazilika1 = new Card();
-			bazilika1.setCardTypeId(type.getId());
-			bazilika1.getProperties().put("title", "Hősök 1");
-			cardService.save(bazilika1);
-			bazilika.getCardIds().add(bazilika1.getId());
-			
-			Card bazilika2 = new Card();
-			bazilika2.setCardTypeId(type.getId());
-			bazilika2.getProperties().put("title", "Hősök 2");
-			cardService.save(bazilika2);
-			bazilika.getCardIds().add(bazilika2.getId());
-			
-			Card bazilika3 = new Card();
-			bazilika3.setCardTypeId(type.getId());
-			bazilika3.getProperties().put("title", "Hősök 3");
-			cardService.save(bazilika3);
-			bazilika.getCardIds().add(bazilika3.getId());
-			
-			placeService.save(bazilika);
-			
-			Place parl = new Place();
-			places.add(parl);
-			
-			Card parl1 = new Card();
-			parl1.setCardTypeId(type.getId());
-			parl1.getProperties().put("title", "Hősök 1");
-			cardService.save(parl1);
-			
-			Card parl2 = new Card();
-			parl2.setCardTypeId(type.getId());
-			parl2.getProperties().put("title", "Hősök 2");
-			cardService.save(parl2);
-			
-			Card parl3 = new Card();
-			parl3.setCardTypeId(type.getId());
-			parl3.getProperties().put("title", "Hősök 3");
-			cardService.save(parl3);
-			
-			placeService.save(parl);
+			Place hosok = createHosok(places, type);
+			createBazilika(places, type);
+			createParl(places, type);
 			
 			Card starter = new Card();
 			starter.setCardTypeId(type.getId());
@@ -201,9 +144,10 @@ public class MainServlet extends HttpServlet {
 			tourService.save(tour);
 			
 			User user = userService.load(userId);
-			Preconditions.checkNotNull(user);
+			// Preconditions.checkNotNull(user);
 			
-			user.getTourIds().add(tour.getId());
+			new TimeLineService().sendInfoCardItem(userId, starter, hosok);
+			// user.getTourIds().add(tour.getId());
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
@@ -365,5 +309,88 @@ public class MainServlet extends HttpServlet {
 		}
 		WebUtil.setFlash(req, message);
 		res.sendRedirect(WebUtil.buildUrl(req, "/"));
+	}
+	
+	private void createParl(List<Place> places, CardType type) {
+		Place parl = new Place();
+		parl.setLocation(new GeoPt(42.0f, 42.0f));
+		places.add(parl);
+		
+		Card parl1 = new Card();
+		parl1.setCardTypeId(type.getId());
+		parl1.getProperties().put("title", "Hősök 1");
+		cardService.save(parl1);
+		
+		Card parl2 = new Card();
+		parl2.setCardTypeId(type.getId());
+		parl2.getProperties().put("title", "Hősök 2");
+		cardService.save(parl2);
+		
+		Card parl3 = new Card();
+		parl3.setCardTypeId(type.getId());
+		parl3.getProperties().put("title", "Hősök 3");
+		cardService.save(parl3);
+		
+		placeService.save(parl);
+	}
+	
+	private void createBazilika(List<Place> places, CardType type) {
+		Place bazilika = new Place();
+		bazilika.setLocation(new GeoPt(42.0f, 42.0f));
+		places.add(bazilika);
+		
+		System.out.println(bazilika);
+		
+		Card bazilika1 = new Card();
+		bazilika1.setCardTypeId(type.getId());
+		bazilika1.getProperties().put("title", "Hősök 1");
+		cardService.save(bazilika1);
+		bazilika.getCardIds().add(bazilika1.getId());
+		System.out.println(bazilika);
+		
+		Card bazilika2 = new Card();
+		bazilika2.setCardTypeId(type.getId());
+		bazilika2.getProperties().put("title", "Hősök 2");
+		cardService.save(bazilika2);
+		bazilika.getCardIds().add(bazilika2.getId());
+		System.out.println(bazilika);
+		
+		Card bazilika3 = new Card();
+		bazilika3.setCardTypeId(type.getId());
+		bazilika3.getProperties().put("title", "Hősök 3");
+		cardService.save(bazilika3);
+		bazilika.getCardIds().add(bazilika3.getId());
+		System.out.println(bazilika);
+		
+		placeService.save(bazilika);
+	}
+	
+	private Place createHosok(List<Place> places, CardType type) {
+		Place hosok = new Place();
+		places.add(hosok);
+		hosok.setLocation(new GeoPt(42.0f, 42.0f));
+		
+		Card hosok1 = new Card();
+		hosok1.setCardTypeId(type.getId());
+		hosok1.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/02_hosoktere01.png");
+		hosok1.setAudio("Heroes' Square is one of the most-visited attractions in Budapest.");
+		cardService.save(hosok1);
+		hosok.getCardIds().add(hosok1.getId());
+		
+		Card hosok2 = new Card();
+		hosok2.setCardTypeId(type.getId());
+		hosok2.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/03_1.card.png");
+		hosok2.setAudio("Both Heroes' Square and Városliget, the adjoining city park, were created at the end of the nineteenth century to commemorate the thousandth anniversary of the conquest of Hungary in 895. Since many of the attractions weren't ready in time the festivities were held one year late, in 1896. The square only received its current name in 1932.");
+		cardService.save(hosok2);
+		hosok.getCardIds().add(hosok2.getId());
+		
+		Card hosok3 = new Card();
+		hosok3.setCardTypeId(type.getId());
+		hosok3.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/04_2.card.png");
+		hosok3.setAudio("At the center of Heroes' Square stands the Millennium Monument, designed in 1894 by Albert Schickedanz and completed thirty-five years later. The many statues were designed by György Zala.");
+		cardService.save(hosok3);
+		hosok.getCardIds().add(hosok3.getId());
+		placeService.save(hosok);
+		return hosok;
 	}
 }

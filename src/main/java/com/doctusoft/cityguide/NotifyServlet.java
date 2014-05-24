@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.Place;
 import com.doctusoft.cityguide.entity.Tour;
-import com.doctusoft.cityguide.entity.User;
 import com.doctusoft.cityguide.service.CardService;
 import com.doctusoft.cityguide.service.MapsService;
 import com.doctusoft.cityguide.service.PlaceService;
@@ -55,7 +54,7 @@ import com.google.common.collect.Lists;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class NotifyServlet extends HttpServlet {
-
+	
 	private static final Logger LOG = Logger.getLogger(NotifyServlet.class.getSimpleName());
 	
 	private static final String[] CAT_UTTERANCES = {
@@ -114,39 +113,39 @@ public class NotifyServlet extends HttpServlet {
 			
 			new MapsService().search(location, "restaurant");
 			
-		      UserService userService = new UserService();
-		      User actualUser = userService.load(userId);
-		      Preconditions.checkNotNull(actualUser);
-		      String actualTourId = actualUser.getActualTourId();
-		      if(actualTourId != null) {
-			      TourService tourService = new TourService();
-			      
-			      Tour actualTour = tourService.load(actualTourId);
-			      
-			      
-//			      Place place = placeService.isPlaceNearBy(location);
-			      Place place = getNextPlace(actualTour);
-			      if(place != null) {
-			    	  actualTour.setActualPlaceId(place.getId());
-			    	 Place nextPlace = getNextPlace(actualTour);
-			    	 if(nextPlace != null) {
-			    		  CardService cardService = new CardService();
-			    		  TimeLineService timeLineService = new TimeLineService(); 
-			    		  for(String cardId: place.getCardIds()) {
-			    			  Card card = cardService.load(cardId);
-			    			  Preconditions.checkNotNull(card);
-			    			  timeLineService.sendInfoCardItem(userId, card, nextPlace);
-			    		  }
-			    	  }	else {
-			    		  LOG.info("Tour ended");
-			    	  }
-			    	  
-			      } else {
+			UserService userService = new UserService();
+			// User actualUser = userService.load(userId);
+			// Preconditions.checkNotNull(actualUser);
+			// String actualTourId = actualUser.getActualTourId();
+			String actualTourId = "113e19de-561d-4f44-aa2c-647645b67fb5";
+			if (actualTourId != null) {
+				TourService tourService = new TourService();
+				
+				Tour actualTour = tourService.load(actualTourId);
+				
+				// Place place = placeService.isPlaceNearBy(location);
+				Place place = getNextPlace(actualTour);
+				if (place != null) {
+					actualTour.setActualPlaceId(place.getId());
+					Place nextPlace = getNextPlace(actualTour);
+					if (nextPlace != null) {
+						CardService cardService = new CardService();
+						TimeLineService timeLineService = new TimeLineService();
+						for (String cardId : Lists.reverse(place.getCardIds())) {
+							Card card = cardService.load(cardId);
+							Preconditions.checkNotNull(card);
+							timeLineService.sendInfoCardItem(userId, card, nextPlace);
+						}
+					} else {
+						LOG.info("Tour ended");
+					}
+					
+				} else {
 					LOG.info("place is null");
-			      }
-			
-			LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
-		      }
+				}
+				
+				LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
+			}
 			
 			// This is a location notification. Ping the device with a timeline item
 			// telling them where they are.
@@ -197,16 +196,16 @@ public class NotifyServlet extends HttpServlet {
 	}
 	
 	private Place getNextPlace(Tour actualTour) {
-		 int actualIndex = actualTour.getPlaceIds().indexOf(actualTour.getActualPlaceId());
-   	  if(actualIndex < actualTour.getPlaceIds().size() - 1) {
-   		  String nextPlaceId = actualTour.getPlaceIds().get(actualIndex + 1);
-   		  PlaceService placeService = new PlaceService();
-   		  Place nextPlace = placeService.load(nextPlaceId);
-   		  return nextPlace;
-   	  } else {
-   		  return null; 
-   	  }
-   	  
+		int actualIndex = actualTour.getPlaceIds().indexOf(actualTour.getActualPlaceId());
+		if (actualIndex < actualTour.getPlaceIds().size() - 1) {
+			String nextPlaceId = actualTour.getPlaceIds().get(actualIndex + 1);
+			PlaceService placeService = new PlaceService();
+			Place nextPlace = placeService.load(nextPlaceId);
+			return nextPlace;
+		} else {
+			return null;
+		}
+		
 	}
 	
 	/**
