@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import lombok.extern.java.Log;
 
 import com.google.api.services.mirror.model.Location;
+import com.google.common.collect.Lists;
 import com.googlecode.placesapiclient.client.argument.ArgumentMap;
 import com.googlecode.placesapiclient.client.entity.Place;
 import com.googlecode.placesapiclient.client.service.impl.PlacesServiceImpl;
@@ -13,7 +14,7 @@ import com.googlecode.placesapiclient.client.service.impl.PlacesServiceImpl;
 @Log
 public class MapsService {
 	
-	public void search(Location location, String query) {
+	public List<Place> search(Location location, String query) {
 		try {
 			ArgumentMap argumentMap = new ArgumentMap("AIzaSyD9bBQsLWwm0McpeGb2u5UQ77sQFcgzKRY");
 			argumentMap.putLocation(location.getLatitude(), location.getLongitude());
@@ -24,12 +25,14 @@ public class MapsService {
 			PlacesServiceImpl placesServiceImpl = new PlacesServiceImpl("AIzaSyD9bBQsLWwm0McpeGb2u5UQ77sQFcgzKRY");
 			placesServiceImpl.init();
 			List<Place> places = placesServiceImpl.placeNearbySearchRequest(argumentMap);
-			System.out.println("places: " + places);
+			log.info("places: " + places);
 			for (Place place : places) {
-				System.out.println("place: " + place.getName());
+				log.info("place: " + place.getName());
 			}
+			return places;
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "error finding places", e);
+			return Lists.newArrayList();
 		}
 	}
 }
