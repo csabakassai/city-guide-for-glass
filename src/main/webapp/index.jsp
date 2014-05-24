@@ -18,6 +18,7 @@ limitations under the License.
 <%@ page import="com.doctusoft.cityguide.MirrorClient" %>
 <%@ page import="com.doctusoft.cityguide.WebUtil" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.google.api.services.mirror.model.TimelineItem" %>
 <%@ page import="com.google.api.services.mirror.model.Subscription" %>
 <%@ page import="com.google.api.services.mirror.model.Attachment" %>
