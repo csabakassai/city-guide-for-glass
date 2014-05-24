@@ -149,10 +149,8 @@ public class MainServlet extends HttpServlet {
 			hosok.getCardIds().add(hosok3.getId());
 			placeService.save(hosok);
 			
-			
 			Place bazilika = new Place();
 			places.add(bazilika);
-			
 			
 			Card bazilika1 = new Card();
 			bazilika1.setCardTypeId(type.getId());
@@ -191,19 +189,21 @@ public class MainServlet extends HttpServlet {
 			parl3.setCardTypeId(type.getId());
 			parl3.getProperties().put("title", "Hősök 3");
 			cardService.save(parl3);
-
+			
 			placeService.save(parl);
 			
+			Card starter = new Card();
+			starter.setCardTypeId(type.getId());
+			starter.getProperties().put("title", "Start First tour");
+			cardService.save(starter);
 			
-			
-			Tour tour = new Tour("First Tour", places);
+			Tour tour = new Tour("First Tour", places, starter.getId());
 			tourService.save(tour);
 			
 			User user = userService.load(userId);
 			Preconditions.checkNotNull(user);
 			
 			user.getTourIds().add(tour.getId());
-			
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			

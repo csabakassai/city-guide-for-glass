@@ -32,10 +32,7 @@ public abstract class EntityDao<T> {
 	}
 	
 	public void deleteAll() {
-		
 		List<T> allEntity = loadAll();
-		for (T t : allEntity) {
-			ofy().delete().entity(t);
-		}
+		ofy().delete().entities(allEntity);
 	}
 }
