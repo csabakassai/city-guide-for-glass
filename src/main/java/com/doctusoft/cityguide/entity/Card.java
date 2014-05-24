@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import lombok.Data;
+import lombok.experimental.Builder;
 
 import com.google.common.collect.Maps;
 import com.googlecode.objectify.Ref;
@@ -13,6 +14,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Unindex;
 
+@Builder
 @Data
 @Cache
 @Unindex

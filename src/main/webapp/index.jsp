@@ -287,6 +287,13 @@ limitations under the License.
         </button>
       </form>
       <% } %>
+      
+   <form action="<%= WebUtil.buildUrl(request, "/main") %>" method="post">
+        <input type="hidden" name="operation" value="initData">
+          <button class="btn btn-block btn-success" type="submit">
+          init data
+        </button>
+  </form>
     </div>
   </div>
 </div>
