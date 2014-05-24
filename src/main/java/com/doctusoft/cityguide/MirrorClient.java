@@ -128,6 +128,7 @@ public class MirrorClient {
 	 */
 	public static TimelineItem insertTimelineItem(Credential credential, TimelineItem item)
 			throws IOException {
+		LOG.info("insert card: " + item.getHtml());
 		return getMirror(credential).timeline().insert(item).execute();
 	}
 	
