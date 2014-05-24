@@ -124,18 +124,23 @@ public class NotifyServlet extends HttpServlet {
 			      Tour actualTour = tourService.load(actualTourId);
 			      
 			      
-			      PlaceService placeService = new PlaceService();
-			      Place place = placeService.isPlaceNearBy(location);
+//			      Place place = placeService.isPlaceNearBy(location);
+			      Place place = getNextPlace(actualTour);
 			      if(place != null) {
-			    	  Place nextPlace = null;
-			    	  CardService cardService = new CardService();
 			    	  actualTour.setActualPlaceId(place.getId());
-			    	  TimeLineService timeLineService = new TimeLineService(); 
-			    	  for(String cardId: place.getCardIds()) {
-			    		  Card card = cardService.load(cardId);
-			    		  Preconditions.checkNotNull(card);
-			    		  timeLineService.sendInfoCardItem(userId, card, nextPlace);
+			    	 Place nextPlace = getNextPlace(actualTour);
+			    	 if(nextPlace != null) {
+			    		  CardService cardService = new CardService();
+			    		  TimeLineService timeLineService = new TimeLineService(); 
+			    		  for(String cardId: place.getCardIds()) {
+			    			  Card card = cardService.load(cardId);
+			    			  Preconditions.checkNotNull(card);
+			    			  timeLineService.sendInfoCardItem(userId, card, nextPlace);
+			    		  }
+			    	  }	else {
+			    		  LOG.info("Tour ended");
 			    	  }
+			    	  
 			      } else {
 					LOG.info("place is null");
 			      }
@@ -189,6 +194,19 @@ public class NotifyServlet extends HttpServlet {
 				LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
 			}
 		}
+	}
+	
+	private Place getNextPlace(Tour actualTour) {
+		 int actualIndex = actualTour.getPlaceIds().indexOf(actualTour.getActualPlaceId());
+   	  if(actualIndex < actualTour.getPlaceIds().size() - 1) {
+   		  String nextPlaceId = actualTour.getPlaceIds().get(actualIndex + 1);
+   		  PlaceService placeService = new PlaceService();
+   		  Place nextPlace = placeService.load(nextPlaceId);
+   		  return nextPlace;
+   	  } else {
+   		  return null; 
+   	  }
+   	  
 	}
 	
 	/**

@@ -2,7 +2,6 @@ package com.doctusoft.cityguide.service;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
