@@ -17,7 +17,6 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortOptions;
 import com.google.common.base.Preconditions;
-import com.googlecode.objectify.Ref;
 
 public class PlaceService extends EntityDao<Place> {
 	
@@ -70,8 +69,10 @@ public class PlaceService extends EntityDao<Place> {
 		Builder builder = Document.newBuilder().setId(place.getId())
 				.addField(Field.newBuilder().setName("location").setGeoPoint(new GeoPoint(place.getLocation().getLatitude(), place.getLocation().getLongitude())).build())
 				.addField(Field.newBuilder().setName("name").setText(place.getName()).build());
-		for (Ref<Card> card : place.getCards()) {
-			for (String description : card.get().getProperties().values()) {
+		CardService cardService = new CardService();
+		for (String cardId : place.getCardIds()) {
+			Card card = cardService.load(cardId);
+			for (String description : card.getProperties().values()) {
 				if (description != null) {
 					builder.addField(Field.newBuilder().setName("description").setText(description).build());
 				}

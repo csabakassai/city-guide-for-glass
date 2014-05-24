@@ -6,9 +6,7 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -25,12 +23,18 @@ public class Tour {
 	private String id;
 	private String title;
 	@Load
-	private List<Ref<Place>> places = Lists.newArrayList();
+	private List<String> placeIds = Lists.newArrayList();
 	
-	public Tour(String id, String title, List<Ref<Place>> places) {
+	private String actualPlaceId;
+	
+	public Tour(String title, List<Place> places) {
 		super();
-		this.id = Objects.firstNonNull(id, UUID.randomUUID().toString());
+		this.id = UUID.randomUUID().toString();
 		this.title = title;
-		this.places = places;
+		for (Place place : places) {
+			placeIds.add(place.getId());
+		}
+		
 	}
+
 }

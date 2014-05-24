@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -22,6 +21,8 @@ public class User {
 	@Id
 	private String email;
 	@Load
-	private List<Ref<Tour>> tours = Lists.newArrayList();
+	private List<String> tourIds = Lists.newArrayList();
+	
+	private String actualTourId;
 	
 }

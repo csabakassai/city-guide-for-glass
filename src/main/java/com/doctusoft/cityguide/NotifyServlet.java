@@ -17,8 +17,13 @@ package com.doctusoft.cityguide;
 
 import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.Place;
+import com.doctusoft.cityguide.entity.Tour;
+import com.doctusoft.cityguide.entity.User;
+import com.doctusoft.cityguide.service.CardService;
 import com.doctusoft.cityguide.service.PlaceService;
 import com.doctusoft.cityguide.service.TimeLineService;
+import com.doctusoft.cityguide.service.TourService;
+import com.doctusoft.cityguide.service.UserService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -105,33 +110,38 @@ public class NotifyServlet extends HttpServlet {
 
 
     if (notification.getCollection().equals("locations")) {
-      LOG.info("Notification of updated location");
-      Mirror glass = MirrorClient.getMirror(credential);
-      // item id is usually 'latest'
-      Location location = glass.locations().get(notification.getItemId()).execute();
-
-      PlaceService placeService = new PlaceService();
-      Place place = placeService.isPlaceNearBy(location);
-      if(place != null) {
-    	  TimeLineService timeLineService = new TimeLineService(); 
-    	  Iterator<Ref<Card>> iterator = place.getCards().iterator();
-		Preconditions.checkArgument(iterator.hasNext());
-    	  timeLineService.sendTimeLineItem(userId, iterator.next().get());
+	      LOG.info("Notification of updated location");
+	      UserService userService = new UserService();
+	      User actualUser = userService.load(userId);
+	      Preconditions.checkNotNull(actualUser);
+	      String actualTourId = actualUser.getActualTourId();
+	      if(actualTourId != null) {
+	      TourService tourService = new TourService();
+	      
+	      Tour actualTour = tourService.load(actualTourId);
+	      
+	      Mirror glass = MirrorClient.getMirror(credential);
+	      // item id is usually 'latest'
+	      Location location = glass.locations().get(notification.getItemId()).execute();
+	
+	      
+	      
+	      PlaceService placeService = new PlaceService();
+	      Place place = placeService.isPlaceNearBy(location);
+	      if(place != null) {
+	    	  Place nextPlace = null;
+	    	  CardService cardService = new CardService();
+	    	  actualTour.setActualPlaceId(place.getId());
+	    	  TimeLineService timeLineService = new TimeLineService(); 
+	    	  for(String cardId: place.getCardIds()) {
+	    		  Card card = cardService.load(cardId);
+	    		  Preconditions.checkNotNull(card);
+	    		  timeLineService.sendInfoCardItem(userId, card, nextPlace);
+	    	  }
+	      }
+	      LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
       }
       
-      LOG.info("New location is " + location.getLatitude() + ", " + location.getLongitude());
-      
-      
-      MirrorClient.insertTimelineItem(
-          credential,
-          new TimelineItem()
-              .setText("Java Quick Start says you are now at " + location.getLatitude()
-                  + " by " + location.getLongitude())
-              .setNotification(new NotificationConfig().setLevel("DEFAULT")).setLocation(location)
-              .setMenuItems(Lists.newArrayList(new MenuItem().setAction("NAVIGATE"))));
-
-      // This is a location notification. Ping the device with a timeline item
-      // telling them where they are.
     } else if (notification.getCollection().equals("timeline")) {
       // Get the impacted timeline item
       TimelineItem timelineItem = mirrorClient.timeline().get(notification.getItemId()).execute();

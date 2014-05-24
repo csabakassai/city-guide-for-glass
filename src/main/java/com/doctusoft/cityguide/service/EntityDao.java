@@ -26,4 +26,12 @@ public abstract class EntityDao<T> {
 	public List<T> loadAll() {
 		return ofy().load().type(getEntityClass()).list();
 	}
+	
+	public void deleteAll() {
+		
+		List<T> allEntity = loadAll();
+		for (T t : allEntity) {
+			ofy().delete().entity(t);
+		}
+	}
 }

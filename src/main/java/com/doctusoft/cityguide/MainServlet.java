@@ -18,9 +18,7 @@ package com.doctusoft.cityguide;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -30,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.CardType;
 import com.doctusoft.cityguide.entity.Place;
+import com.doctusoft.cityguide.entity.Tour;
+import com.doctusoft.cityguide.entity.User;
 import com.doctusoft.cityguide.service.CardService;
 import com.doctusoft.cityguide.service.CardTypeDao;
 import com.doctusoft.cityguide.service.PlaceService;
@@ -48,10 +48,8 @@ import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.MenuValue;
 import com.google.api.services.mirror.model.NotificationConfig;
 import com.google.api.services.mirror.model.TimelineItem;
-import com.google.appengine.api.datastore.GeoPt;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.Ref;
 
 /**
  * Handles POST requests from index.jsp
@@ -120,13 +118,90 @@ public class MainServlet extends HttpServlet {
 		String message = "";
 		
 		if (req.getParameter("operation").equals("initData")) {
-			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
-			Card card = cardService.save(Card.builder().cardType(Ref.create(type)).properties(ImmutableMap.of("title", "Title", "content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut laoreet arcu. Donec suscipit est id nibh consequat rutrum. Quisque vitae nulla euismod, vehicula dui id, pretium purus. Maecenas imperdiet turpis non ante porta scelerisque. Donec hendrerit suscipit lorem, et venenatis ante vehicula nec")).build());
-			message = timelineService.sendTimeLineItem(userId, card);
 			
-			Ref<Card> ref = Ref.create(card);
-			Place place = Place.builder().id(UUID.randomUUID().toString()).name("Hősök tere").cards(Collections.singletonList(ref)).location(new GeoPt(10, 10)).build();
-			placeService.save(place);
+			tourService.deleteAll();
+			cardService.deleteAll();
+			placeService.deleteAll();
+			
+			List<Place> places = Lists.newArrayList();
+			CardType type = cardTypeService.save(CardType.builder().text(req.getParameter("template")).build());
+			
+			Place hosok = new Place();
+			placeService.save(hosok);
+			places.add(hosok);
+			
+			Card hosok1 = new Card();
+			hosok1.setCardTypeId(type.getId());
+			hosok1.getProperties().put("title", "Hősök 1");
+			cardService.save(hosok1);
+			hosok.getCardIds().add(hosok1.getId());
+			
+			Card hosok2 = new Card();
+			hosok2.setCardTypeId(type.getId());
+			hosok2.getProperties().put("title", "Hősök 2");
+			cardService.save(hosok2);
+			hosok.getCardIds().add(hosok2.getId());
+			
+			Card hosok3 = new Card();
+			hosok3.setCardTypeId(type.getId());
+			hosok3.getProperties().put("title", "Hősök 3");
+			cardService.save(hosok3);
+			hosok.getCardIds().add(hosok3.getId());
+			
+			
+			Place bazilika = new Place();
+			placeService.save(bazilika);
+			places.add(bazilika);
+			
+			
+			Card bazilika1 = new Card();
+			bazilika1.setCardTypeId(type.getId());
+			bazilika1.getProperties().put("title", "Hősök 1");
+			cardService.save(bazilika1);
+			bazilika.getCardIds().add(bazilika1.getId());
+			
+			Card bazilika2 = new Card();
+			bazilika2.setCardTypeId(type.getId());
+			bazilika2.getProperties().put("title", "Hősök 2");
+			cardService.save(bazilika2);
+			bazilika.getCardIds().add(bazilika2.getId());
+			
+			Card bazilika3 = new Card();
+			bazilika3.setCardTypeId(type.getId());
+			bazilika3.getProperties().put("title", "Hősök 3");
+			cardService.save(bazilika3);
+			bazilika.getCardIds().add(bazilika3.getId());
+			
+			Place parl = new Place();
+			placeService.save(parl);
+			places.add(parl);
+			
+			Card parl1 = new Card();
+			parl1.setCardTypeId(type.getId());
+			parl1.getProperties().put("title", "Hősök 1");
+			cardService.save(parl1);
+			
+			Card parl2 = new Card();
+			parl2.setCardTypeId(type.getId());
+			parl2.getProperties().put("title", "Hősök 2");
+			cardService.save(parl2);
+			
+			Card parl3 = new Card();
+			parl3.setCardTypeId(type.getId());
+			parl3.getProperties().put("title", "Hősök 3");
+			cardService.save(parl3);
+
+			
+			
+			
+			Tour tour = new Tour("First Tour", places);
+			tourService.save(tour);
+			
+			User user = userService.load(userId);
+			Preconditions.checkNotNull(user);
+			
+			user.getTourIds().add(tour.getId());
+			
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
