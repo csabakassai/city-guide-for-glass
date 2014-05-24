@@ -11,6 +11,7 @@ import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.OnSave;
 import com.googlecode.objectify.annotation.Unindex;
 
 @Data
@@ -19,10 +20,16 @@ import com.googlecode.objectify.annotation.Unindex;
 @Entity
 public class Place {
 	@Id
-	private String id = UUID.randomUUID().toString();
+	private String id;
 	private String name;
 	private List<String> pictureUrls = Lists.newArrayList();
 	@Load
 	private List<Ref<Card>> cards = Lists.newArrayList();
 	
+	@OnSave
+	void onSave() {
+		if (id == null) {
+			id = UUID.randomUUID().toString();
+		}
+	}
 }

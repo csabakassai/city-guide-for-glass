@@ -1,10 +1,11 @@
 package com.doctusoft.cityguide.service;
 
+import com.doctusoft.cityguide.entity.Tour;
 
-public class TourService extends EntityDao<TourService> {
+public class TourService extends EntityDao<Tour> {
 	
 	@Override
-	Class<TourService> getEntityClass() {
-		return TourService.class;
+	Class<Tour> getEntityClass() {
+		return Tour.class;
 	}
 }
