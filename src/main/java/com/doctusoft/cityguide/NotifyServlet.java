@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -31,20 +30,15 @@ import com.doctusoft.cityguide.entity.Card;
 import com.doctusoft.cityguide.entity.Place;
 import com.doctusoft.cityguide.entity.Tour;
 import com.doctusoft.cityguide.service.CardService;
-import com.doctusoft.cityguide.service.MapsService;
 import com.doctusoft.cityguide.service.PlaceService;
 import com.doctusoft.cityguide.service.TimeLineService;
 import com.doctusoft.cityguide.service.TourService;
-import com.doctusoft.cityguide.service.UserService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.mirror.Mirror;
 import com.google.api.services.mirror.model.Location;
-import com.google.api.services.mirror.model.MenuItem;
 import com.google.api.services.mirror.model.Notification;
-import com.google.api.services.mirror.model.TimelineItem;
-import com.google.api.services.mirror.model.UserAction;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -103,7 +97,6 @@ public class NotifyServlet extends HttpServlet {
 		// Figure out the impacted user and get their credentials for API calls
 		String userId = notification.getUserToken();
 		Credential credential = AuthUtil.getCredential(userId);
-		Mirror mirrorClient = MirrorClient.getMirror(credential);
 		
 		if (notification.getCollection().equals("locations")) {
 			LOG.info("Notification of updated location");
@@ -111,9 +104,9 @@ public class NotifyServlet extends HttpServlet {
 			// item id is usually 'latest'
 			Location location = glass.locations().get(notification.getItemId()).execute();
 			
-			new MapsService().search(location, "restaurant");
+			// new MapsService().search(location, "restaurant");
 			
-			UserService userService = new UserService();
+			// UserService userService = new UserService();
 			// User actualUser = userService.load(userId);
 			// Preconditions.checkNotNull(actualUser);
 			// String actualTourId = actualUser.getActualTourId();
@@ -149,55 +142,6 @@ public class NotifyServlet extends HttpServlet {
 			
 			// This is a location notification. Ping the device with a timeline item
 			// telling them where they are.
-		} else if (notification.getCollection().equals("timeline")) {
-			// Get the impacted timeline item
-			TimelineItem timelineItem = mirrorClient.timeline().get(notification.getItemId()).execute();
-			LOG.info("Notification impacted timeline item with ID: " + timelineItem.getId());
-			
-			// If it was a share, and contains a photo, update the photo's caption to
-			// acknowledge that we got it.
-			if (notification.getUserActions().contains(new UserAction().setType("SHARE"))
-					&& timelineItem.getAttachments() != null && timelineItem.getAttachments().size() > 0) {
-				LOG.info("It was a share of a photo. Updating the caption on the photo.");
-				
-				String caption = timelineItem.getText();
-				if (caption == null) {
-					caption = "";
-				}
-				
-				// Create a new item with just the values that we want to patch.
-				TimelineItem itemPatch = new TimelineItem();
-				itemPatch.setText("Java Quick Start got your photo! " + caption);
-				
-				// Patch the item. Notice that since we retrieved the entire item above
-				// in order to access the caption, we could have just changed the text
-				// in place and used the update method, but we wanted to illustrate the
-				// patch method here.
-				mirrorClient.timeline().patch(notification.getItemId(), itemPatch).execute();
-			} else if (notification.getUserActions().contains(new UserAction().setType("LAUNCH"))) {
-				LOG.info("It was a note taken with the 'take a note' voice command. Processing it.");
-				
-				// Grab the spoken text from the timeline card and update the card with
-				// an HTML response (deleting the text as well).
-				String noteText = timelineItem.getText();
-				String utterance = CAT_UTTERANCES[new Random().nextInt(CAT_UTTERANCES.length)];
-				
-				timelineItem.setText(null);
-				timelineItem.setHtml(makeHtmlForCard("<p class='text-auto-size'>"
-						+ "Oh, did you say " + noteText + "? " + utterance + "</p>"));
-				timelineItem.setMenuItems(Lists.newArrayList(
-						new MenuItem().setAction("DELETE")));
-				
-				mirrorClient.timeline().update(timelineItem.getId(), timelineItem).execute();
-			} else if (notification.getUserActions().contains(new UserAction().setType("GET_MEDIA_INPUT"))) {
-				for (MenuItem menuItem : timelineItem.getMenuItems()) {
-					String payload = menuItem.getPayload();
-					LOG.info("Media input:" + payload);
-				}
-			} else {
-
-				LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
-			}
 		}
 	}
 	
