@@ -66,7 +66,7 @@ public class HttpManager {
 					resultImputStream = entity.getContent();
 				}
 			} else {
-				Log.d(TAG, "Not HttpStatus.SC_OK");
+				Log.d(TAG, "Not HttpStatus.SC_OK: " + response.getStatusLine().getStatusCode());
 			}
 		} catch (HttpResponseException e) {
 			e.printStackTrace();
@@ -82,6 +82,7 @@ public class HttpManager {
 	public InputStream postJSONData(String json, String host) {
 		InputStream resultImputStream = null;
 	    try {
+	    	Log.d(TAG, "host: " + host);
 	        HttpPost httppost = new HttpPost(host);
 	        StringEntity se = new StringEntity(json, HTTP.UTF_8); 
 	        se.setContentType("application/json;charset=UTF-8"); 
@@ -96,7 +97,7 @@ public class HttpManager {
 					resultImputStream = entity.getContent();
 				}
 			} else {
-				Log.d(TAG, "Not HttpStatus.SC_OK" + response.getStatusLine().getStatusCode());
+				Log.d(TAG, "Not HttpStatus.SC_OK: " + response.getStatusLine().getStatusCode());
 			}
 
 
