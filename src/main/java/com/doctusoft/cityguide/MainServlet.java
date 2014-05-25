@@ -143,7 +143,9 @@ public class MainServlet extends HttpServlet {
 			
 			Card starter = new Card();
 			starter.setCardTypeId(type.getId());
+			starter.setNextPlaceMenuItemTitle("Start tour");
 			starter.getProperties().put("title", "Start First tour");
+			starter.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/02_hosoktere01.png");
 			cardService.save(starter);
 			
 			Tour tour = new Tour("First Tour", places, starter.getId());
@@ -151,7 +153,7 @@ public class MainServlet extends HttpServlet {
 			tourService.save(tour);
 			
 			User user = new User();
-			user.setId(userId);
+			user.setId(USER_ID);
 			user.getTourIds().add(tour.getId());
 			userService.save(user);
 			
@@ -321,7 +323,7 @@ public class MainServlet extends HttpServlet {
 	
 	private void createParl(List<Place> places, CardType type) {
 		Place parl = new Place();
-		parl.setLocation(new GeoPt(42.0f, 42.0f));
+		parl.setLocation(new GeoPt(47.50712069999999f, 19.04566879999993f));
 		places.add(parl);
 		
 		Card parl1 = new Card();
@@ -344,7 +346,7 @@ public class MainServlet extends HttpServlet {
 	
 	private void createBazilika(List<Place> places, CardType type) {
 		Place bazilika = new Place();
-		bazilika.setLocation(new GeoPt(42.0f, 42.0f));
+		bazilika.setLocation(new GeoPt(47.5008902f, 19.05398869999999f));
 		places.add(bazilika);
 		
 		System.out.println(bazilika);
@@ -376,26 +378,26 @@ public class MainServlet extends HttpServlet {
 	private Place createHosok(List<Place> places, CardType type) {
 		Place hosok = new Place();
 		places.add(hosok);
-		hosok.setLocation(new GeoPt(42.0f, 42.0f));
+		hosok.setLocation(new GeoPt(47.5149429f, 19.077862600000003f));
 		
 		Card hosok1 = new Card();
 		hosok1.setCardTypeId(type.getId());
 		hosok1.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/02_hosoktere01.png");
-		hosok1.setAudio("Heroes' Square is one of the most-visited attractions in Budapest.");
+		hosok1.setVideoURL("https://docs.google.com/a/doctusoft.com/file/d/0B-yVBA23vGL7OUk1aTc0MUZEckk/preview");
 		cardService.save(hosok1);
 		hosok.getCardIds().add(hosok1.getId());
 		
 		Card hosok2 = new Card();
 		hosok2.setCardTypeId(type.getId());
 		hosok2.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/03_1.card.png");
-		hosok2.setAudio("Both Heroes' Square and Városliget, the adjoining city park, were created at the end of the nineteenth century to commemorate the thousandth anniversary of the conquest of Hungary in 895. Since many of the attractions weren't ready in time the festivities were held one year late, in 1896. The square only received its current name in 1932.");
+		//TODO videoURL
 		cardService.save(hosok2);
 		hosok.getCardIds().add(hosok2.getId());
 		
 		Card hosok3 = new Card();
 		hosok3.setCardTypeId(type.getId());
 		hosok3.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/04_2.card.png");
-		hosok3.setAudio("At the center of Heroes' Square stands the Millennium Monument, designed in 1894 by Albert Schickedanz and completed thirty-five years later. The many statues were designed by György Zala.");
+		//TODO videoURL
 		cardService.save(hosok3);
 		hosok.getCardIds().add(hosok3.getId());
 		placeService.save(hosok);

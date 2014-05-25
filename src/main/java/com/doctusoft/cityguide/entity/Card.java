@@ -21,7 +21,8 @@ public class Card {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	private String cardTypeId;
-	private String audio;
+	private String videoURL;
+	private String nextPlaceMenuItemTitle = "Navigate to next place";
 	private Map<String, String> properties = Maps.newHashMap();
 	
 	public Map<String, String> getProperties() {

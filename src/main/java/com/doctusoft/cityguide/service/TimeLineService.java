@@ -2,10 +2,13 @@ package com.doctusoft.cityguide.service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import lombok.extern.java.Log;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.doctusoft.cityguide.AuthUtil;
 import com.doctusoft.cityguide.MirrorClient;
@@ -36,21 +39,25 @@ public class TimeLineService {
 		
 		TimelineItem timelineItem = new TimelineItem();
 		timelineItem.setHtml(html);
-		timelineItem.setSpeakableText(card.getAudio());
+		List<MenuItem> menuItems = Lists.newArrayList();
+		if(StringUtils.isNotBlank(card.getVideoURL())) {
+			MenuValue read = new MenuValue();
+			read.setDisplayName("play");
+			MenuItem playVideoMenuItem = new MenuItem();
+			playVideoMenuItem.setAction("PLAY_VIDEO");
+			playVideoMenuItem.setPayload(card.getVideoURL());
+			playVideoMenuItem.setValues(Arrays.asList(read));
+			menuItems.add(playVideoMenuItem);
+		}
 		
-		MenuValue read = new MenuValue();
-		read.setDisplayName("play");
-		MenuItem readOutLoudMenuItem = new MenuItem();
-		readOutLoudMenuItem.setAction("PLAY_VIDEO");
-		readOutLoudMenuItem.setPayload("https://docs.google.com/a/doctusoft.com/uc?authuser=0&id=0B-yVBA23vGL7OUk1aTc0MUZEckk&export=download");
-		readOutLoudMenuItem.setValues(Arrays.asList(read));
+		MenuItem navigateToNextMenuItem = new MenuItem();
+		navigateToNextMenuItem.setAction("NAVIGATE");
 		
-		MenuValue menuValue = new MenuValue();
-		menuValue.setDisplayName("Next");
+		MenuValue toNext = new MenuValue();
+		toNext.setDisplayName(card.getNextPlaceMenuItemTitle());
+		navigateToNextMenuItem.setValues(Lists.newArrayList(toNext));
 		
-		MenuItem nextMenuItem = new MenuItem();
-		nextMenuItem.setAction("DELETE");
-		nextMenuItem.setValues(Arrays.asList(menuValue));
+		menuItems.add(navigateToNextMenuItem);
 		
 		Location location = new Location();
 		GeoPt persistentLcation = nextPlace.getLocation();
@@ -59,7 +66,9 @@ public class TimeLineService {
 		
 		timelineItem.setLocation(location);
 		
-		timelineItem.setMenuItems(Lists.newArrayList(readOutLoudMenuItem, nextMenuItem));
+		if(!menuItems.isEmpty()) {
+			timelineItem.setMenuItems(menuItems);
+		}
 		
 		// Triggers an audible tone when the timeline item is received
 		timelineItem.setNotification(new NotificationConfig().setLevel("DEFAULT"));
