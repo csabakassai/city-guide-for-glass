@@ -26,6 +26,9 @@ import android.widget.TextView;
 import com.google.android.glass.app.Card;
 
 public class MainActivity extends Activity implements OnClickListener {
+	
+
+	
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private final HttpManager mHttpManager = new HttpManager();
 	private ArrayList<String> mVoiceResults;
@@ -105,91 +108,79 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected String doInBackground(String... params) {
-			String voiceResult = params[0];
+			final String voiceResult = params[0];
 			AccountManager accountManager = AccountManager.get(getApplicationContext());
 			// Use your Glassware's account type.
-			Account[] accounts = accountManager.getAccountsByType("com.appspot.doctusoft-city-guide2");
+			Account[] accounts = accountManager.getAccountsByType("com.google");
 			TextView title = (TextView) findViewById(R.id.first_tv);
 			if(title != null) {
 				title.setText(voiceResult);
 			}
-			final String AUTH_TOKEN_TYPE = "oauth2:http://doctusoft-city-guide2.appspot.com/auth/login";
 
 			Log.e(TAG, "accountManager: "+ accountManager);
-			Log.e(TAG, "accounts: "+ accounts);
-//			accountManager.getAuthToken(accounts[0], AUTH_TOKEN_TYPE, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-//				public void run(AccountManagerFuture<Bundle> future) {
-					try {
-						String email = "glasshack20@gmail.com";
-//						String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
-//						StringBuilder stringBuilder = new StringBuilder();
-//						stringBuilder.append("https://www.googleapis.com/mirror/v1/accounts/");
-//						stringBuilder.append(token);
-//						stringBuilder.append("/com.appspot.doctusoft-city-guide2/");
-//						stringBuilder.append(email);
-
-						StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/voice");
-						String json = "{voiceResult: "+voiceResult+"}";
-						mHttpManager.postJSONData(json, stringBuilder.toString());
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage());
-					}
-//				}
-//			}, null);
-			return null;
-		}
-
-	}
-
-	class DownloadImageAsyncTask extends AsyncTask<URL, Void, Bitmap> {
-
-		@Override
-		protected Bitmap doInBackground(URL... params) {
-			return downloadPicFromURL(params[0]);
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			super.onPostExecute(result);
-			mCard.addImage(result);
-		}
-
-		private Bitmap downloadPicFromURL(URL url) {
+			Log.e(TAG, "accounts length: "+ accounts.length);
+					
 			try {
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				int length = connection.getContentLength();
-				InputStream is = (InputStream) url.getContent();
-				byte[] imageData = new byte[length];
-				int buffersize = (int) Math.ceil(length / (double) 100);
-				int downloaded = 0;
-				int read;
-				while (downloaded < length) {
-					if (length < buffersize) {
-						read = is.read(imageData, downloaded, length);
-					} else if ((length - downloaded) <= buffersize) {
-						read = is.read(imageData, downloaded, length - downloaded);
-					} else {
-						read = is.read(imageData, downloaded, buffersize);
-					}
-					downloaded += read;
-				}
-				Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, length);
-				if (bitmap != null) {
-					Log.d(TAG, "Bitmap created");
-				} else {
-					Log.d(TAG, "Bitmap not created");
-				}
-				is.close();
-				return bitmap;
-			} catch (MalformedURLException e) {
-				Log.e(TAG, "Malformed exception: ", e);
-			} catch (IOException e) {
-				Log.e(TAG, "IOException: ", e);
+				StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/voice");
+				String json = "{voiceResult: " + voiceResult + "}";
+				mHttpManager.postJSONData(json, stringBuilder.toString());
 			} catch (Exception e) {
-				Log.e(TAG, "Exception: ", e);
+				Log.e(TAG, e.getMessage());
 			}
 			return null;
-
 		}
+
 	}
+
+//	class DownloadImageAsyncTask extends AsyncTask<URL, Void, Bitmap> {
+//
+//		@Override
+//		protected Bitmap doInBackground(URL... params) {
+//			return downloadPicFromURL(params[0]);
+//		}
+//
+//		@Override
+//		protected void onPostExecute(Bitmap result) {
+//			super.onPostExecute(result);
+//			mCard.addImage(result);
+//		}
+//
+//		private Bitmap downloadPicFromURL(URL url) {
+//			try {
+//				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//				int length = connection.getContentLength();
+//				InputStream is = (InputStream) url.getContent();
+//				byte[] imageData = new byte[length];
+//				int buffersize = (int) Math.ceil(length / (double) 100);
+//				int downloaded = 0;
+//				int read;
+//				while (downloaded < length) {
+//					if (length < buffersize) {
+//						read = is.read(imageData, downloaded, length);
+//					} else if ((length - downloaded) <= buffersize) {
+//						read = is.read(imageData, downloaded, length - downloaded);
+//					} else {
+//						read = is.read(imageData, downloaded, buffersize);
+//					}
+//					downloaded += read;
+//				}
+//				Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, length);
+//				if (bitmap != null) {
+//					Log.d(TAG, "Bitmap created");
+//				} else {
+//					Log.d(TAG, "Bitmap not created");
+//				}
+//				is.close();
+//				return bitmap;
+//			} catch (MalformedURLException e) {
+//				Log.e(TAG, "Malformed exception: ", e);
+//			} catch (IOException e) {
+//				Log.e(TAG, "IOException: ", e);
+//			} catch (Exception e) {
+//				Log.e(TAG, "Exception: ", e);
+//			}
+//			return null;
+//
+//		}
+//	}
 }
