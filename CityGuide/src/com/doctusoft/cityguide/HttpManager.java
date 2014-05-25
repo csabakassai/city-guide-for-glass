@@ -96,7 +96,7 @@ public class HttpManager {
 					resultImputStream = entity.getContent();
 				}
 			} else {
-				Log.d(TAG, "Not HttpStatus.SC_OK");
+				Log.d(TAG, "Not HttpStatus.SC_OK" + response.getStatusLine().getStatusCode());
 			}
 
 

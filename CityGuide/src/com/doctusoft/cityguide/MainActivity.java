@@ -121,7 +121,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			Log.e(TAG, "accounts length: "+ accounts.length);
 					
 			try {
-				StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/voice");
+				StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/start");
 				String json = "{voiceResult: " + voiceResult + "}";
 				mHttpManager.postJSONData(json, stringBuilder.toString());
 			} catch (Exception e) {
