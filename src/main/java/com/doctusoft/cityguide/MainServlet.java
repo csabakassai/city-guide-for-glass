@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -62,7 +61,7 @@ public class MainServlet extends HttpServlet {
 	
 	public static String USER_ID = "104678827155686779010";
 	
-	public static final String TOUR_ID = UUID.randomUUID().toString();
+	public static final String TOUR_ID = "f0f87890-e402-11e3-ac10-0800200c9a66";
 	
 	private CardService cardService = new CardService();
 	private CardTypeDao cardTypeService = new CardTypeDao();
@@ -139,13 +138,13 @@ public class MainServlet extends HttpServlet {
 			
 			Place hosok = createHosok(places, type);
 			createBazilika(places, type);
-			createParl(places, type);
+//			createParl(places, type);
 			
 			Card starter = new Card();
 			starter.setCardTypeId(type.getId());
 			starter.setNextPlaceMenuItemTitle("Start tour");
 			starter.getProperties().put("title", "Start First tour");
-			starter.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/02_hosoktere01.png");
+			starter.getProperties().put("picture", "https://docs.google.com/a/doctusoft.com/uc?authuser=0&id=0B5jtLBwq9wEYT1pmWGJocVhvbTQ&export=download");
 			cardService.save(starter);
 			
 			Tour tour = new Tour("First Tour", places, starter.getId());
@@ -157,7 +156,6 @@ public class MainServlet extends HttpServlet {
 			user.getTourIds().add(tour.getId());
 			userService.save(user);
 			
-			new TimeLineService().sendInfoCardItem(userId, starter, hosok);
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			
@@ -321,28 +319,21 @@ public class MainServlet extends HttpServlet {
 		res.sendRedirect(WebUtil.buildUrl(req, "/"));
 	}
 	
-	private void createParl(List<Place> places, CardType type) {
-		Place parl = new Place();
-		parl.setLocation(new GeoPt(47.50712069999999f, 19.04566879999993f));
-		places.add(parl);
-		
-		Card parl1 = new Card();
-		parl1.setCardTypeId(type.getId());
-		parl1.getProperties().put("title", "Hősök 1");
-		cardService.save(parl1);
-		
-		Card parl2 = new Card();
-		parl2.setCardTypeId(type.getId());
-		parl2.getProperties().put("title", "Hősök 2");
-		cardService.save(parl2);
-		
-		Card parl3 = new Card();
-		parl3.setCardTypeId(type.getId());
-		parl3.getProperties().put("title", "Hősök 3");
-		cardService.save(parl3);
-		
-		placeService.save(parl);
-	}
+//	private void createParl(List<Place> places, CardType type) {
+//		Place parl = new Place();
+//		parl.setLocation(new GeoPt(47.50712069999999f, 19.04566879999993f));
+//		places.add(parl);
+//		
+//		Card parl1 = new Card();
+//		parl1.setCardTypeId(type.getId());
+//		parl1.getProperties().put("title", "Hősök 1");
+//		parl1.getProperties().put("picture", "https://lh4.googleusercontent.com/bVb1j9XxfXTLErZgSeVjqfQ1MkKoneMs8Kpv56TPxeTZ-E0RJ8y1f_yVT7mZQtC93w=w1743-h824");
+//		parl1.setVideoURL("https://docs.google.com/a/doctusoft.com/file/d/0B-yVBA23vGL7UlFsVGFqVjVDRmc/preview");
+//		parl.getCardIds().add(parl1.getId());
+//		cardService.save(parl1);
+//		
+//		placeService.save(parl);
+//	}
 	
 	private void createBazilika(List<Place> places, CardType type) {
 		Place bazilika = new Place();
@@ -353,24 +344,10 @@ public class MainServlet extends HttpServlet {
 		
 		Card bazilika1 = new Card();
 		bazilika1.setCardTypeId(type.getId());
-		bazilika1.getProperties().put("title", "Hősök 1");
+		bazilika1.getProperties().put("picture", "https://docs.google.com/a/doctusoft.com/uc?authuser=0&id=0B5jtLBwq9wEYRzRZeVh4cGJCZkU&export=download");
+		bazilika1.setVideoURL("https://docs.google.com/a/doctusoft.com/file/d/0B-yVBA23vGL7UlFsVGFqVjVDRmc/preview");
 		cardService.save(bazilika1);
 		bazilika.getCardIds().add(bazilika1.getId());
-		System.out.println(bazilika);
-		
-		Card bazilika2 = new Card();
-		bazilika2.setCardTypeId(type.getId());
-		bazilika2.getProperties().put("title", "Hősök 2");
-		cardService.save(bazilika2);
-		bazilika.getCardIds().add(bazilika2.getId());
-		System.out.println(bazilika);
-		
-		Card bazilika3 = new Card();
-		bazilika3.setCardTypeId(type.getId());
-		bazilika3.getProperties().put("title", "Hősök 3");
-		cardService.save(bazilika3);
-		bazilika.getCardIds().add(bazilika3.getId());
-		System.out.println(bazilika);
 		
 		placeService.save(bazilika);
 	}
@@ -382,24 +359,11 @@ public class MainServlet extends HttpServlet {
 		
 		Card hosok1 = new Card();
 		hosok1.setCardTypeId(type.getId());
-		hosok1.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/02_hosoktere01.png");
+		hosok1.getProperties().put("picture", "https://docs.google.com/a/doctusoft.com/uc?authuser=0&id=0B5jtLBwq9wEYT1pmWGJocVhvbTQ&export=download");
 		hosok1.setVideoURL("https://docs.google.com/a/doctusoft.com/file/d/0B-yVBA23vGL7OUk1aTc0MUZEckk/preview");
 		cardService.save(hosok1);
 		hosok.getCardIds().add(hosok1.getId());
 		
-		Card hosok2 = new Card();
-		hosok2.setCardTypeId(type.getId());
-		hosok2.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/03_1.card.png");
-		//TODO videoURL
-		cardService.save(hosok2);
-		hosok.getCardIds().add(hosok2.getId());
-		
-		Card hosok3 = new Card();
-		hosok3.setCardTypeId(type.getId());
-		hosok3.getProperties().put("picture", "http://doctusoft-city-guide2.appspot.com/static/images/04_2.card.png");
-		//TODO videoURL
-		cardService.save(hosok3);
-		hosok.getCardIds().add(hosok3.getId());
 		placeService.save(hosok);
 		return hosok;
 	}

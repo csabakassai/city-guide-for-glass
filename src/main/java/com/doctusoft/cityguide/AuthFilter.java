@@ -39,6 +39,9 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
+		
+		LOG.info("Doing some authentication");
+		
 		if (response instanceof HttpServletResponse && request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -48,7 +51,7 @@ public class AuthFilter implements Filter {
 					httpRequest.getRequestURI().equals("/oauth2callback") ||
 					httpRequest.getRequestURI().equals("/notify") || 
 					httpRequest.getRequestURI().startsWith("/voice") ||
-					httpRequest.getRequestURI().startsWith("/start")) {
+					httpRequest.getRequestURI().startsWith("/newtour")) {
 				LOG.info("Skipping auth check during auth flow");
 				filterChain.doFilter(request, response);
 				return;

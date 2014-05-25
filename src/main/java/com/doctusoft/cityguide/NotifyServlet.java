@@ -117,7 +117,7 @@ public class NotifyServlet extends HttpServlet {
 			// User actualUser = userService.load(userId);
 			// Preconditions.checkNotNull(actualUser);
 			// String actualTourId = actualUser.getActualTourId();
-			String actualTourId = "113e19de-561d-4f44-aa2c-647645b67fb5";
+			String actualTourId = MainServlet.TOUR_ID;
 			if (actualTourId != null) {
 				TourService tourService = new TourService();
 				

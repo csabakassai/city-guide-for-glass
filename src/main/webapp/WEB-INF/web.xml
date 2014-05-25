@@ -64,7 +64,7 @@ limitations under the License.
   </servlet>
   <servlet-mapping>
     <servlet-name>start</servlet-name>
-    <url-pattern>/start</url-pattern>
+    <url-pattern>/voice</url-pattern>
   </servlet-mapping>
   
 
