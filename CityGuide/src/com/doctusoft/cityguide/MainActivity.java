@@ -1,19 +1,12 @@
 package com.doctusoft.cityguide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+
+import org.apache.http.NameValuePair;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -123,7 +116,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			try {
 				StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/voice");
 				String json = "{voiceResult: " + voiceResult + "}";
-				mHttpManager.postJSONData(json, stringBuilder.toString());
+				mHttpManager.postJSONData(json, stringBuilder.toString());				
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage());
 			}
