@@ -172,7 +172,13 @@ public class NotifyServlet extends HttpServlet {
 						new MenuItem().setAction("DELETE")));
 				
 				mirrorClient.timeline().update(timelineItem.getId(), timelineItem).execute();
+			} else if (notification.getUserActions().contains(new UserAction().setType("GET_MEDIA_INPUT"))) {
+				for (MenuItem menuItem : timelineItem.getMenuItems()) {
+					String payload = menuItem.getPayload();
+					LOG.info("Media input:" + payload);
+				}
 			} else {
+
 				LOG.warning("I don't know what to do with this notification, so I'm ignoring it.");
 			}
 		}
