@@ -35,23 +35,25 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mVoiceResults = getIntent().getExtras().getStringArrayList(RecognizerIntent.EXTRA_RESULTS);
-
-		mCard = new Card(this);
-		mCardView = mCard.setText(mVoiceResults.get(0)).getView();
-		// To receive touch events from the touchpad, the view should be
-		// focusable.
-		mCardView.setOnClickListener(this);
-		mCardView.setFocusable(true);
-		mCardView.setFocusableInTouchMode(true);
-		setContentView(mCardView);
-		// //By XML
-		// setContentView(R.layout.activity_main);
-		// TextView firstTextView = (TextView) findViewById(R.id.first_tv);
-		// firstTextView.setText(mVoiceResults.get(0));
-
-		// Networking tasks must run a non UI thread.
-		new HttpHandlerAsyncTask().execute(mVoiceResults.get(0));
+		if(getIntent() != null && getIntent().getExtras() != null) {
+			mVoiceResults = getIntent().getExtras().getStringArrayList(RecognizerIntent.EXTRA_RESULTS);
+		
+			mCard = new Card(this);
+			mCardView = mCard.setText(mVoiceResults.get(0)).getView();
+			// To receive touch events from the touchpad, the view should be
+			// focusable.
+			mCardView.setOnClickListener(this);
+			mCardView.setFocusable(true);
+			mCardView.setFocusableInTouchMode(true);
+			setContentView(mCardView);
+			// //By XML
+			// setContentView(R.layout.activity_main);
+			// TextView firstTextView = (TextView) findViewById(R.id.first_tv);
+			// firstTextView.setText(mVoiceResults.get(0));
+	
+			// Networking tasks must run a non UI thread.
+			new HttpHandlerAsyncTask().execute(mVoiceResults.get(0));
+		}
 		
 		// // Download image
 		// try {
@@ -76,9 +78,10 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume() {		
 		super.onResume();
-		mCardView.requestFocus();
+		if(mCardView != null)
+			mCardView.requestFocus();
 		super.onResume();
 	}
 
@@ -107,27 +110,32 @@ public class MainActivity extends Activity implements OnClickListener {
 			// Use your Glassware's account type.
 			Account[] accounts = accountManager.getAccountsByType("com.appspot.doctusoft-city-guide2");
 			TextView title = (TextView) findViewById(R.id.first_tv);
-			title.setText(voiceResult);
+			if(title != null) {
+				title.setText(voiceResult);
+			}
 			final String AUTH_TOKEN_TYPE = "oauth2:http://doctusoft-city-guide2.appspot.com/auth/login";
 
-			accountManager.getAuthToken(accounts[0], AUTH_TOKEN_TYPE, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
-				public void run(AccountManagerFuture<Bundle> future) {
+			Log.e(TAG, "accountManager: "+ accountManager);
+			Log.e(TAG, "accounts: "+ accounts);
+//			accountManager.getAuthToken(accounts[0], AUTH_TOKEN_TYPE, null, MainActivity.this, new AccountManagerCallback<Bundle>() {
+//				public void run(AccountManagerFuture<Bundle> future) {
 					try {
 						String email = "glasshack20@gmail.com";
-						String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
-						StringBuilder stringBuilder = new StringBuilder();
-						stringBuilder.append("https://www.googleapis.com/mirror/v1/accounts/");
-						stringBuilder.append(token);
-						stringBuilder.append("/com.appspot.doctusoft-city-guide2/");
-						stringBuilder.append(email);
+//						String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
+//						StringBuilder stringBuilder = new StringBuilder();
+//						stringBuilder.append("https://www.googleapis.com/mirror/v1/accounts/");
+//						stringBuilder.append(token);
+//						stringBuilder.append("/com.appspot.doctusoft-city-guide2/");
+//						stringBuilder.append(email);
 
-						String json = "{}";
+						StringBuilder stringBuilder = new StringBuilder("http://doctusoft-city-guide2.appspot.com/voice");
+						String json = "{voiceResult: "+voiceResult+"}";
 						mHttpManager.postJSONData(json, stringBuilder.toString());
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage());
 					}
-				}
-			}, null);
+//				}
+//			}, null);
 			return null;
 		}
 
