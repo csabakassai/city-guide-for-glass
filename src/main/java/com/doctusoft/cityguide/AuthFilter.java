@@ -46,10 +46,12 @@ public class AuthFilter implements Filter {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			
+			LOG.info(httpRequest.getRequestURI());
+			
 			// skip auth for static content, middle of auth flow, notify servlet
 			if (httpRequest.getRequestURI().startsWith("/static") ||
 					httpRequest.getRequestURI().equals("/oauth2callback") ||
-					httpRequest.getRequestURI().equals("/notify") || 
+					httpRequest.getRequestURI().equals("/notify") ||
 					httpRequest.getRequestURI().startsWith("/voice") ||
 					httpRequest.getRequestURI().startsWith("/newtour")) {
 				LOG.info("Skipping auth check during auth flow");
