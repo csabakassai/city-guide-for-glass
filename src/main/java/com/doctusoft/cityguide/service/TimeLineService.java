@@ -39,9 +39,10 @@ public class TimeLineService {
 		timelineItem.setSpeakableText(card.getAudio());
 		
 		MenuValue read = new MenuValue();
-		read.setDisplayName("read");
+		read.setDisplayName("play");
 		MenuItem readOutLoudMenuItem = new MenuItem();
-		readOutLoudMenuItem.setAction("READ_ALOUD");
+		readOutLoudMenuItem.setAction("PLAY_VIDEO");
+		readOutLoudMenuItem.setPayload("https://docs.google.com/a/doctusoft.com/uc?authuser=0&id=0B-yVBA23vGL7OUk1aTc0MUZEckk&export=download");
 		readOutLoudMenuItem.setValues(Arrays.asList(read));
 		
 		MenuValue menuValue = new MenuValue();
