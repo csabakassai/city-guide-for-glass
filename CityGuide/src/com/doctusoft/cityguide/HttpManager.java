@@ -65,6 +65,7 @@ public class HttpManager {
 				if (entity != null) {
 					resultImputStream = entity.getContent();
 				}
+				Log.d(TAG, "HttpStatus.SC_OK");
 			} else {
 				Log.d(TAG, "Not HttpStatus.SC_OK: " + response.getStatusLine().getStatusCode());
 			}
