@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -57,6 +58,11 @@ import com.google.common.collect.Lists;
  * @author Jenny Murphy - http://google.com/+JennyMurphy
  */
 public class MainServlet extends HttpServlet {
+	
+	
+	public static String USER_ID = "104678827155686779010";
+	
+	public static final String TOUR_ID = UUID.randomUUID().toString();
 	
 	private CardService cardService = new CardService();
 	private CardTypeDao cardTypeService = new CardTypeDao();
@@ -141,13 +147,15 @@ public class MainServlet extends HttpServlet {
 			cardService.save(starter);
 			
 			Tour tour = new Tour("First Tour", places, starter.getId());
+			tour.setId(TOUR_ID);
 			tourService.save(tour);
 			
-			User user = userService.load(userId);
-			// Preconditions.checkNotNull(user);
+			User user = new User();
+			user.setId(userId);
+			user.getTourIds().add(tour.getId());
+			userService.save(user);
 			
 			new TimeLineService().sendInfoCardItem(userId, starter, hosok);
-			// user.getTourIds().add(tour.getId());
 			
 		} else if (req.getParameter("operation").equals("insertSubscription")) {
 			

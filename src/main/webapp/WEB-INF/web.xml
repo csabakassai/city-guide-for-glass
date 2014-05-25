@@ -57,6 +57,16 @@ limitations under the License.
     <servlet-name>main</servlet-name>
     <url-pattern>/main</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>start</servlet-name>
+    <servlet-class>com.doctusoft.cityguide.StartTourServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>start</servlet-name>
+    <url-pattern>/start</url-pattern>
+  </servlet-mapping>
+  
 
   <servlet>
     <servlet-name>oauth2callback</servlet-name>

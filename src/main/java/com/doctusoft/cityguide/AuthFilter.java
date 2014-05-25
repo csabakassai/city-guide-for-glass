@@ -46,8 +46,9 @@ public class AuthFilter implements Filter {
 			// skip auth for static content, middle of auth flow, notify servlet
 			if (httpRequest.getRequestURI().startsWith("/static") ||
 					httpRequest.getRequestURI().equals("/oauth2callback") ||
-					httpRequest.getRequestURI().equals("/notify")
-					|| httpRequest.getRequestURI().startsWith("/voice")) {
+					httpRequest.getRequestURI().equals("/notify") || 
+					httpRequest.getRequestURI().startsWith("/voice") ||
+					httpRequest.getRequestURI().startsWith("/start")) {
 				LOG.info("Skipping auth check during auth flow");
 				filterChain.doFilter(request, response);
 				return;

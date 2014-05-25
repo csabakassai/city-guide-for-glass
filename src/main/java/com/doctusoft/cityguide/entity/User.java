@@ -19,7 +19,7 @@ import com.googlecode.objectify.annotation.Unindex;
 @Entity
 public class User {
 	@Id
-	private String email;
+	private String id;
 	@Load
 	private List<String> tourIds = Lists.newArrayList();
 	
